@@ -1,0 +1,7 @@
+adv_bsa	http://api.bart.gov/api/bsa.aspx?cmd=bsa&date=today
+adv_count	http://api.bart.gov/api/bsa.aspx?cmd=count
+adv_elev	http://api.bart.gov/api/bsa.aspx?cmd=elev
+rt_etd	http://api.bart.gov/api/etd.aspx?cmd=etd&orig=ALL
+rout_routes	http://api.bart.gov/api/route.aspx?cmd=routes
+rout_routeinfo	http://api.bart.gov/api/route.aspx?cmd=routeinfo&route=all
+sched_special	http://api.bart.gov/api/sched.aspx?cmd=special
