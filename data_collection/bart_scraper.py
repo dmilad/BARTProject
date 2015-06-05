@@ -62,7 +62,6 @@ def start():
 		time.sleep(max([0, 30 - duration]))
 
 if __name__ == '__main__':
-	test_send_to_storage()
 	while True:
 		try:
 			start()
