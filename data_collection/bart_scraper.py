@@ -24,7 +24,7 @@ def send_to_storage():
 	with open('api_urls.txt', 'r') as urls:
 		fetchtime = datetime.datetime.today() - datetime.timedelta(hours = 1)
 		fetchhour = fetchtime.hour
-		today = datetime.date.today() - datetime.timedelta(hours = 1)
+		today = (datetime.datetime.today() - datetime.timedelta(hours = 1)).date()
 		for line in urls:
 			filename, url = line.split('\t')
 
