@@ -1,5 +1,5 @@
 pyowm
-pprint
+pprintpp
 simplejson
 requests
 softlayer-object-storage
