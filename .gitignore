@@ -3,4 +3,5 @@ data_collection/data/*
 data_collection/swift_cred.py
 data_collection/notes.txt
 *.pyc
-nohup.out
+nohup.*
+bootstrap.txt

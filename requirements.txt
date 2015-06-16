@@ -1,0 +1,5 @@
+pyowm
+pprintpp
+simplejson
+requests
+softlayer-object-storage

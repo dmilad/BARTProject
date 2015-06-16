@@ -73,7 +73,7 @@ def send_to_storage(api_urls):
 		with open(fullfilename, 'r') as readfile:
 			print "Sending " + fullfilename
 			sl_storage['bart_dump'][readfile.name.split('/')[-1]].send(readfile) 
-			
+
 		print 'Fetch times file sent to object store.'
 
 def start():
@@ -107,7 +107,7 @@ def start():
 		duration = end_time - start_time 
 		time.sleep(max([0, 30 - duration]))
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
 	#run this forever
 	while True:
