@@ -50,9 +50,9 @@ def bulk_send(maindir, to_send, container):
 if __name__ == '__main__':
 	if sys.argv[1] == 'bart':
 		container = 'bart_dump'
-		bulk_send(maindir = 'data', to_send = to_send('data', container), container)
+		bulk_send(maindir = 'data', to_send = to_send('data', container), container = container)
 	elif sys.argv[1] == 'weather':
 		container = 'weather_dump'
-		bulk_send(maindir = 'data', to_send = to_send('data', container), container)
+		bulk_send(maindir = 'data', to_send = to_send('data', container), container = container)
 	else:
 		print "You need to specify an option: 'bart' or 'weather'."
