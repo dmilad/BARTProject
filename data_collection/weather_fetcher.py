@@ -2,12 +2,14 @@
 #python weather_fetcher.py current
 
 import os, sys
-import pyowm
 import time, datetime
+from swift_cred import sl_storage
+import pyowm
 from owm_cred import owm_api_key
 from pprint import pprint
 import object_storage
 import simplejson
+
 
 def fetch(latlongs, current = True):
 
