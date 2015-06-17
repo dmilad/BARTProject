@@ -1,5 +1,7 @@
 data_collection/data
 data_collection/data/*
+data_collection/data/sentdata
+data_collection/data/sentdata/*
 data_collection/swift_cred.py
 data_collection/notes.txt
 *.pyc

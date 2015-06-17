@@ -20,7 +20,7 @@ def fetch(api_urls):
 		#record hour of the fetch (to use in file name)
 		fetchhour = fetchtime.hour
 		#record today's daye (to use in file name)
-		today = datetime.date.today()
+		today = fetchtime.date()
 
 		#for each listed api command
 		for line in urls:
@@ -36,51 +36,54 @@ def fetch(api_urls):
 			print str(fetchtime), filename, url + '&key=' + api_key
 	return fetchtime
 
-def send_to_storage(api_urls):
+
+def send_to_storage(maindir = 'data'):
 
 	"""
 	sends 
 	"""
 
-	with open(api_urls, 'r') as urls:
+	here = [f for f in os.walk(maindir).next()[2] if f.endswith(".txt")]
+	#print here
 
-		#record the last fetch hour (so if now is 3pm, last hour was 2pm.)
-		fetchtime = datetime.datetime.today() - datetime.timedelta(hours = 1)
-		fetchhour = fetchtime.hour
-		#record last hour's date
-		today = (datetime.datetime.today() - datetime.timedelta(hours = 1)).date()
+	today = (datetime.datetime.today()).date()
+	fetchtoday = [f for f in os.walk(maindir).next()[2] if f == 'fetch_times_' + str(today) + '.txt']
+	#print fetchtoday
 
-		#for each listed api command
-		for line in urls:
+	move = list(set(here) - set(fetchtoday))
+	#print move
 
-			#grab name of command
-			filename, url = line.split('\t')
-
-			#construct last hour's file name using appropriate date and hour of request
-			fullfilename = 'data/' + filename + '_' + str(today) + '_' + str(fetchhour) + '.txt'
-
-			#send the file to bart_dump container
-			with open(fullfilename, 'r') as readfile:
-				print "Sending " + fullfilename
-				sl_storage['bart_dump'][readfile.name.split('/')[-1]].send(readfile)
-
-		print 'All data files sent to object store.'
-
-		#contruct fetchtime file name associate with the last hour
-		fullfilename = 'data/fetch_times_' + str(today) + '.txt'
-		
-		#send the fetchtime file name, even if we are in still in the same day
+	#send here
+	for filetosend in here:
+		fullfilename = 'data/' + filetosend
 		with open(fullfilename, 'r') as readfile:
 			print "Sending " + fullfilename
-			sl_storage['bart_dump'][readfile.name.split('/')[-1]].send(readfile) 
+			sl_storage['bart_dump'][readfile.name.split('/')[-1]].send(readfile)
+	print 'All data files sent to object store.'
 
-		print 'Fetch times file sent to object store.'
+	#move move to sentdata
+	for filetomove in move:
+		os.rename(maindir+'/'+filetomove, maindir+'/sentdata/'+filetomove)
+	print "Last hour's data moved."
+
 
 def start():
 	sent = False
 	while True:
 		#used to time 30 seconds between requests
 		start_time = time.time()
+		fetchtime = datetime.datetime.today()
+
+ 		#in the first minute of every hour, send files to object storage. 
+		#the purpose of the "sent" boolean to make sure we dont send same files twice in the first minute
+		try:
+			if fetchtime.minute == 0 and not sent:
+				send_to_storage()
+				sent = True
+			else:
+				sent = False
+		except Exception, e:
+			print "An error occurred. Files could not be sent to object store at " + str(fetchtime), e
 
 		#call fetch, which makes api calls based on the urls provided in the api_urls files
 		#record the fetch time in the appropriate file, constructed using the date of fetch (one fetchfile per date)
@@ -90,17 +93,6 @@ def start():
 				fetchtimefile.write(str(fetchtime) + '\n')
 		except:
 			pass
-
-		#in the first minute of every hour, send files to object storage. 
-		#the purpose of the "sent" boolean to make sure we dont send same files twice in the first minute
-		try:
-			if fetchtime.minute == 0 and not sent:
-				send_to_storage('api_urls.txt')
-				sent = True
-			else:
-				sent = False
-		except Exception, e:
-			print "An error occurred. Files could not be sent to object store at " + str(fetchtime), e
 
 		#time 30 seconds between requests
 		end_time = time.time()
