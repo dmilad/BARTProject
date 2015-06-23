@@ -2,7 +2,7 @@ import os
 import requests
 import time, datetime
 import object_storage
-from swift_cred import sl_storage
+from swift_cred import sl_user_name, sl_api_key, sl_data_center 
 
 def fetch(api_urls):
 
@@ -42,6 +42,8 @@ def send_to_storage(maindir = 'data'):
 	"""
 	sends 
 	"""
+
+	sl_storage = object_storage.get_client(sl_user_name, sl_api_key, datacenter = sl_data_center)
 
 	here = [f for f in os.walk(maindir).next()[2] if f.endswith(".txt")]
 	#print here
