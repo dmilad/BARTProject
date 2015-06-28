@@ -1,7 +1,7 @@
 import xmltodict
 import datetime
 import pandas as pd
-import MySQLdb
+#import MySQLdb
 from mysql_cred import mysql_user, mysql_passowrd
 #from pprint import pprint
 
@@ -37,53 +37,84 @@ With delay message
 </root>
 """
 
-con = MySQLdb.connect("localhost", mysql_user, mysql_passowrd, "test")
+#con = MySQLdb.connect("localhost", mysql_user, mysql_passowrd, "test")
 
-with open('../data_collection/data/sentdata/adv_bsa_2015-06-03_23.txt', 'r') as readfile:
-	content = readfile.read().split('\n\n')
-	count = 0
-	for c in content[:-1]:
-		count += 1
-		if count == 1:
-			#print 'c'
+fetchtimes = []
+with open('../data_collection/data/sentdata/fetch_times_2015-06-03.txt', 'r') as readfile:
+	for line in readfile:
+		fetchtimes.append(line.rstrip())
+
+date_hours = list(set([f[:13] for f in fetchtimes]))
+print fetchtimes
+#2015-06-03 23
+print date_hours
+
+for date_hour in date_hours:
+	fetchtimes_subset = [f for f in fetchtimes if f[:13] == date_hour]
+
+	with open('../data_collection/data/sentdata/adv_bsa_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
+		content = readfile.read().split('\n\n')
+
+		to_db = []
+
+		for i, c in enumerate(content[:-1]):
+
+			print i
+			fetchtime = fetchtimes_subset[i]
 			raw = xmltodict.parse(c)
-			#print 'r'
-			print raw
-			#pprint(raw)
-			print
 
 			date = raw['root']['date']
 			time = raw['root']['time']
+
 			bsa_type = type(raw['root']['bsa']) #list or collections.OrderedDict
-			print bsa_type
+			#print bsa_type
 			if bsa_type == list:
 				for bsa_content in raw['root']['bsa']:
-					bsa_id = bsa_content['@id']
-					#...
+					_id = bsa_content['@id']
+					station = bsa_content['station']
+					_type = bsa_content['type']
+					description = bsa_content['description']
+					posted = bsa_content['posted']
+					expires = bsa_content['expires']
+					to_db.append((fetchtime, date, time, _id, station, _type, description, posted, expires))
+
 			else:
-				bsa_content = raw['root']['bsa']
-				_id = bsa_content['@id']
-				station = bsa_content['station']
-				_type = bsa_content['type']
-				description = bsa_content['description']
-				posted = bsa_content['posted']
-				expires = bsa_content['expires']
+				try:
+					bsa_content = raw['root']['bsa']
+					_id = bsa_content['@id']
+					station = bsa_content['station']
+					_type = bsa_content['type']
+					description = bsa_content['description']
+					posted = bsa_content['posted']
+					expires = bsa_content['expires']
+					to_db.append((fetchtime, date, time, _id, station, _type, description, posted, expires))
 
-				to_db = []
-				to_db = [(date, time, _id, station, _type, description, posted, expires)]
-				cursor = con.cursor()
-				cursor.executemany("""INSERT INTO adv_bsa (date, time, id, station, type, description, posted, expires) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""", to_db) # note the two arguments
-				cursor.close()
-con.commit()
-con.close()
+				except:
+					bsa_content = raw['root']['bsa']
+					_id = 'Null'
+					station = 'Null'
+					_type = 'Null'
+					description = bsa_content['description']
+					posted = 'Null'
+					expires = 'Null'
+					to_db.append((fetchtime, date, time, _id, station, _type, description, posted, expires))
 
 
-				#df = pd.DataFrame(columns = ['date', 'time', 'id', 'station', 'type', 'description', 'posted', 'expires'])
-				#df_append = pd.DataFrame({'date': [date], 'time': [time], 'id': [_id], 'station': [station], 'type': [_type], 'description': [description], 'posted': [posted], 'expires': [expires]})
-				#df = df.append(df_append, ignore_index=True)
-				#print df.head
-				#df.to_sql(con = con, name = 'adv_bsa', if_exists = 'append', flavor = 'mysql')
-			
+	print len(to_db)
+	print to_db
+					#cursor = con.cursor()
+					#cursor.executemany("""INSERT INTO adv_bsa (date, time, id, station, type, description, posted, expires) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""", to_db) # note the two arguments
+					#cursor.close()
+	#con.commit()
+	#con.close()
+
+
+					#df = pd.DataFrame(columns = ['date', 'time', 'id', 'station', 'type', 'description', 'posted', 'expires'])
+					#df_append = pd.DataFrame({'date': [date], 'time': [time], 'id': [_id], 'station': [station], 'type': [_type], 'description': [description], 'posted': [posted], 'expires': [expires]})
+					#df = df.append(df_append, ignore_index=True)
+					#print df.head
+					#df.to_sql(con = con, name = 'adv_bsa', if_exists = 'append', flavor = 'mysql')
+				
 
 
 
