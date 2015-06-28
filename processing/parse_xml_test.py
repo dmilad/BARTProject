@@ -72,8 +72,9 @@ with open('../data_collection/data/sentdata/adv_bsa_2015-06-03_23.txt', 'r') as 
 				to_db = []
 				to_db = [(date, time, _id, station, _type, description, posted, expires)]
 				cursor = con.cursor()
-				cursor.executemany("""INSERT INTO adv_bsa (date, time, id, station, type, description, posted, expires) VALUES (%s, %s)""", to_db) # note the two arguments
+				cursor.executemany("""INSERT INTO adv_bsa (date, time, id, station, type, description, posted, expires) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""", to_db) # note the two arguments
 				cursor.close()
+con.commit()
 con.close()
 
 

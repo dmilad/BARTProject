@@ -4,3 +4,4 @@ simplejson
 requests
 softlayer-object-storage
 pandas
+xmltodict
