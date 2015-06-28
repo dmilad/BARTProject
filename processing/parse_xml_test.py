@@ -139,23 +139,6 @@ def adv_elev(date_hour, fetchtimes_subset):
 	  </bsa>
 	  <message /> 
 	</root>
-
-	<root>
-	<uri><![CDATA[ http://api.bart.gov/api/bsa.aspx?cmd=elev ]]></uri>
-	<date>06/28/2015</date>
-	<time>09:33:00 AM PDT</time>
-	<bsa id="132153">
-		<station>BART</station>
-		<type>ELEVATOR</type>
-		<description><![CDATA[There is one elevator out of service at this time: MacArthur Richmond/Bay Point Platform Elevator. Thank you.]]></description>
-		<sms_text>
-		<![CDATA[ 1 elev out of svc MACR RICH/bay point plat elev. ]]>
-		</sms_text>
-		<posted>Sun Jun 28 2015 08:28 AM PDT</posted>
-		<expires/>
-	</bsa>
-	<message/>
-	</root>
 	"""
 	
 	with open('../data_collection/data/sentdata/adv_elev_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
@@ -259,17 +242,17 @@ def sched_special(date_hour, fetchtimes_subset):
 				end_date = special_schedule['end_date']
 				start_time = special_schedule['start_time']
 				end_time = special_schedule['end_time']
-				text = special_schedule['posted']
+				text_ = special_schedule['posted']
 				link = special_schedule['expires']
 				orig = special_schedule['orig']
 				dest = special_schedule['dest']
 				day_of_week = special_schedule['day_of_week']
 				routes_affected = special_schedule['routes_affected']
-				to_db.append((fetchtime, start_date, end_date, start_time, end_time, text, link, orig, dest, day_of_week, routes_affected))
+				to_db.append((fetchtime, start_date, end_date, start_time, end_time, text_, link, orig, dest, day_of_week, routes_affected))
 
 
 		cursor = con.cursor()
-		cursor.executemany("""INSERT INTO sched_special (fetchtime, start_date, end_date, start_time, end_time, text, link, orig, dest, day_of_week, routes_affected) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
+		cursor.executemany("""INSERT INTO sched_special (fetchtime, start_date, end_date, start_time, end_time, text_, link, orig, dest, day_of_week, routes_affected) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
 		print "Records written: " + str(len(to_db))
 
@@ -323,7 +306,7 @@ def rout_routes(date_hour, fetchtimes_subset):
 
 
 		cursor = con.cursor()
-		cursor.executemany("""INSERT INTO rout_routes (fetchtime, name, abbr, routeid, number, color) VALUES (%s, %s, %s, %s, %s, %s)""", to_db)
+		cursor.executemany("""INSERT INTO rout_routes (fetchtime, sched_num, name, abbr, routeid, number, color) VALUES (%s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
 		print "Records written: " + str(len(to_db))
 
@@ -410,11 +393,11 @@ def rout_routeinfo(date_hour, fetchtimes_subset):
 				stations = ",".join(s)
 
 
-				to_db.append((fetchtime, name, abbr, routeid, number, origin, destination, direction, color, holidays, num_stns, stations))
+				to_db.append((fetchtime, sched_num, name, abbr, routeid, number, origin, destination, direction, color, holidays, num_stns, stations))
 
 
 		cursor = con.cursor()
-		cursor.executemany("""INSERT INTO rout_routeinfo (fetchtime, name, abbr, routeid, number, origin, destination, direction, color, holidays, num_stns, stations) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
+		cursor.executemany("""INSERT INTO rout_routeinfo (fetchtime, sched_num, name, abbr, routeid, number, origin, destination, direction, color, holidays, num_stns, stations) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
 		print "Records written: " + str(len(to_db))
 
