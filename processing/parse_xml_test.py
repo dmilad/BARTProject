@@ -69,14 +69,19 @@ with open('../data_collection/data/sentdata/adv_bsa_2015-06-03_23.txt', 'r') as 
 				posted = bsa_content['posted']
 				expires = bsa_content['expires']
 
-				df = pd.DataFrame(columns = ['date', 'time', 'id', 'station', 'type', 'description', 'posted', 'expires'])
+				to_db = []
+				to_db = [(date, time, _id, station, _type, description, posted, expires)]
+				cursor = con.cursor()
+				cursor.executemany("""INSERT INTO adv_bsa (date, time, id, station, type, description, posted, expires) VALUES (%s, %s)""", to_db) # note the two arguments
+				cursor.close()
+con.close()
 
-				df_append = pd.DataFrame({'date': [date], 'time': [time], 'id': [_id], 'station': [station], 'type': [_type], 'description': [description], 'posted': [posted], 'expires': [expires]})
 
-				df = df.append(df_append, ignore_index=True)
-				print df.head
-
-				df.to_sql(con = con, name = 'adv_bsa', if_exists = 'append', flavor = 'mysql')
+				#df = pd.DataFrame(columns = ['date', 'time', 'id', 'station', 'type', 'description', 'posted', 'expires'])
+				#df_append = pd.DataFrame({'date': [date], 'time': [time], 'id': [_id], 'station': [station], 'type': [_type], 'description': [description], 'posted': [posted], 'expires': [expires]})
+				#df = df.append(df_append, ignore_index=True)
+				#print df.head
+				#df.to_sql(con = con, name = 'adv_bsa', if_exists = 'append', flavor = 'mysql')
 			
 
 
