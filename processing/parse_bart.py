@@ -1,11 +1,7 @@
 import xmltodict
 import datetime
-import pandas as pd
 import MySQLdb
-from mysql_cred import mysql_user, mysql_passowrd
-#from pprint import pprint
-
-
+from mysql_cred import mysql_user, mysql_passowrd, mysql_database
 
 def adv_bsa(date_hour, fetchtimes_subset):
 	"""
@@ -37,7 +33,7 @@ def adv_bsa(date_hour, fetchtimes_subset):
 	</root>
 	"""
 
-	with open('../data_collection/data/sentdata/adv_bsa_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
+	with open('to_parse/adv_bsa_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
 		content = readfile.read().split('\n\n')
 
 		to_db = []
@@ -86,7 +82,7 @@ def adv_bsa(date_hour, fetchtimes_subset):
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO adv_bsa (fetchtime, date, time, id, station, type, description, posted, expires) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
-		print "Records written: " + str(len(to_db))
+		print "\t\tadv_bsa - Records written: " + str(len(to_db))
 
 
 def adv_count(date_hour, fetchtimes_subset):
@@ -103,7 +99,7 @@ def adv_count(date_hour, fetchtimes_subset):
 	</root>
 	"""
 	
-	with open('../data_collection/data/sentdata/adv_count_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
+	with open('to_parse/adv_count_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
 		content = readfile.read().split('\n\n')
 
 		to_db = []
@@ -121,7 +117,7 @@ def adv_count(date_hour, fetchtimes_subset):
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO adv_count (fetchtime, date, time, traincount) VALUES (%s, %s, %s, %s)""", to_db)
 		cursor.close()
-		print "Records written: " + str(len(to_db))
+		print "\t\tadv_count - Records written: " + str(len(to_db))
 
 
 def adv_elev(date_hour, fetchtimes_subset):
@@ -141,7 +137,7 @@ def adv_elev(date_hour, fetchtimes_subset):
 	</root>
 	"""
 	
-	with open('../data_collection/data/sentdata/adv_elev_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
+	with open('to_parse/adv_elev_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
 		content = readfile.read().split('\n\n')
 
 		to_db = []
@@ -190,7 +186,7 @@ def adv_elev(date_hour, fetchtimes_subset):
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO adv_elev (fetchtime, date, time, id, station, type, description, posted, expires) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
-		print "Records written: " + str(len(to_db))
+		print "\t\tadv_elev - Records written: " + str(len(to_db))
 
 
 def sched_special(date_hour, fetchtimes_subset):
@@ -225,7 +221,7 @@ def sched_special(date_hour, fetchtimes_subset):
 	If there is a related news article, then the link element will provide a URL to a BART news story.
 	"""
 	
-	with open('../data_collection/data/sentdata/sched_special_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
+	with open('to_parse/sched_special_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
 		content = readfile.read().split('\n\n')
 
 		to_db = []
@@ -254,7 +250,7 @@ def sched_special(date_hour, fetchtimes_subset):
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO sched_special (fetchtime, start_date, end_date, start_time, end_time, text_, link, orig, dest, day_of_week, routes_affected) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
-		print "Records written: " + str(len(to_db))
+		print "\t\tsched_special - Records written: " + str(len(to_db))
 
 
 def rout_routes(date_hour, fetchtimes_subset):
@@ -282,7 +278,7 @@ def rout_routes(date_hour, fetchtimes_subset):
 	</root>
 	"""
 	
-	with open('../data_collection/data/sentdata/rout_routes_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
+	with open('to_parse/rout_routes_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
 		content = readfile.read().split('\n\n')
 
 		to_db = []
@@ -308,7 +304,7 @@ def rout_routes(date_hour, fetchtimes_subset):
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO rout_routes (fetchtime, sched_num, name, abbr, routeid, number, color) VALUES (%s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
-		print "Records written: " + str(len(to_db))
+		print "\t\trout_routes - Records written: " + str(len(to_db))
 
 
 def rout_routeinfo(date_hour, fetchtimes_subset):
@@ -360,7 +356,7 @@ def rout_routeinfo(date_hour, fetchtimes_subset):
 	</root>
 	"""
 	
-	with open('../data_collection/data/sentdata/rout_routeinfo_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
+	with open('to_parse/rout_routeinfo_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
 		content = readfile.read().split('\n\n')
 
 		to_db = []
@@ -399,7 +395,7 @@ def rout_routeinfo(date_hour, fetchtimes_subset):
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO rout_routeinfo (fetchtime, sched_num, name, abbr, routeid, number, origin, destination, direction, color, holidays, num_stns, stations) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
-		print "Records written: " + str(len(to_db))
+		print "\t\trout_routeinfo - Records written: " + str(len(to_db))
 
 
 def rt_etd(date_hour, fetchtimes_subset):
@@ -463,7 +459,7 @@ def rt_etd(date_hour, fetchtimes_subset):
 	If the combination of 'platform' or 'dir' results in no ETD data, a warning message will be displayed.
 	"""
 	
-	with open('../data_collection/data/sentdata/rt_etd_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
+	with open('to_parse/rt_etd_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
 		content = readfile.read().split('\n\n')
 
 		to_db = []
@@ -542,55 +538,38 @@ def rt_etd(date_hour, fetchtimes_subset):
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO rt_etd (fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
-		print "Records written: " + str(len(to_db))
+		print "\t\trt_etd - Records written: " + str(len(to_db))
 
 
+def main(date):
+	con = MySQLdb.connect("localhost", mysql_user, mysql_passowrd, mysql_database)
+
+	fetchtimes = []
+	with open('to_parse/fetch_times_' + date + '.txt', 'r') as readfile:
+		for line in readfile:
+			fetchtimes.append(line.rstrip())
+
+	#print fetchtimes
+	date_hours = list(set([f[:13] for f in fetchtimes if len(f) > 1]))
+
+	for date_hour in date_hours:
+		print "\tParsing files corresponding to " + date_hour + "..."
+		fetchtimes_subset = [f for f in fetchtimes if f[:13] == date_hour]
+
+		adv_bsa(date_hour, fetchtimes_subset)
+		adv_count(date_hour, fetchtimes_subset)
+		adv_elev(date_hour, fetchtimes_subset)
+		sched_special(date_hour, fetchtimes_subset)
+		rout_routes(date_hour, fetchtimes_subset)
+		rout_routeinfo(date_hour, fetchtimes_subset)
+		rt_etd(date_hour, fetchtimes_subset)
+
+	con.commit()
+	con.close()
 
 
-con = MySQLdb.connect("localhost", mysql_user, mysql_passowrd, "test")
-
-"""
-for each api call:
-
-create table
-move file from object store to local
-create dataframe
-append dataframe to table
-move local file to archive container in object store
-
-"""
-
-fetchtimes = []
-with open('../data_collection/data/sentdata/fetch_times_2015-06-03.txt', 'r') as readfile:
-	for line in readfile:
-		fetchtimes.append(line.rstrip())
-
-#print fetchtimes
-date_hours = list(set([f[:13] for f in fetchtimes if len(f) > 1]))
-print date_hours
-
-for date_hour in date_hours:
-	fetchtimes_subset = [f for f in fetchtimes if f[:13] == date_hour]
-
-	adv_bsa(date_hour, fetchtimes_subset)
-	adv_count(date_hour, fetchtimes_subset)
-	adv_elev(date_hour, fetchtimes_subset)
-	sched_special(date_hour, fetchtimes_subset)
-	rout_routes(date_hour, fetchtimes_subset)
-	rout_routeinfo(date_hour, fetchtimes_subset)
-	rt_etd(date_hour, fetchtimes_subset)
-
-con.commit()
-con.close()
-
-
-
-#df = pd.DataFrame(columns = ['date', 'time', 'id', 'station', 'type', 'description', 'posted', 'expires'])
-#df_append = pd.DataFrame({'date': [date], 'time': [time], 'id': [_id], 'station': [station], 'type': [_type], 'description': [description], 'posted': [posted], 'expires': [expires]})
-#df = df.append(df_append, ignore_index=True)
-#print df.head
-#df.to_sql(con = con, name = 'adv_bsa', if_exists = 'append', flavor = 'mysql')
-				
+if __name__ == '__main__':
+	pass
 
 
 

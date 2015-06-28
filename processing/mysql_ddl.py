@@ -1,18 +1,18 @@
-from pandas.io import sql
-import pandas as pd
 import MySQLdb
-from mysql_cred import mysql_user, mysql_passowrd
+from mysql_cred import mysql_user, mysql_passowrd, mysql_database
 
 
-con = MySQLdb.connect("localhost", mysql_user, mysql_passowrd, "test")
-
-#158.85.198.80
-
+con = MySQLdb.connect("localhost", mysql_user, mysql_passowrd, mysql_database)
 cursor = con.cursor()
 
-cursor.execute("""show databases;""")
-result = cursor.fetchall()
-print result
+#cursor.execute("""show databases;""")
+#result = cursor.fetchall()
+#print result
+
+
+
+
+#drop tables 
 
 cursor.execute("""drop table if exists adv_bsa;""")
 cursor.execute("""drop table if exists adv_count;""")
@@ -22,6 +22,10 @@ cursor.execute("""drop table if exists rout_routeinfo;""")
 cursor.execute("""drop table if exists rt_etd;""")
 cursor.execute("""drop table if exists sched_special;""")
 
+
+
+
+#create all tables
 
 cursor.execute("""CREATE TABLE if not exists adv_bsa (
        uid MEDIUMINT NOT NULL AUTO_INCREMENT, 
@@ -136,6 +140,3 @@ cursor.execute("""show tables;""")
 result = cursor.fetchall()
 print result
 
-#cursor.execute("""show create table adv_bsa;""")
-#result = cursor.fetchall()
-#print result
