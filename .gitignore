@@ -11,3 +11,5 @@ data_collection/notes.txt
 nohup.*
 bootstrap.txt
 processing/mysql_cred.py
+processing/to_parse
+processing/to_parse/*

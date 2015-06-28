@@ -40,7 +40,7 @@ cursor.execute("""CREATE TABLE if not exists adv_bsa (
        expires varchar(28),
        PRIMARY KEY (uid))""")
 result = cursor.fetchall()
-print result
+#print result
 
 cursor.execute("""CREATE TABLE if not exists adv_count (
        uid MEDIUMINT NOT NULL AUTO_INCREMENT, 
@@ -50,7 +50,7 @@ cursor.execute("""CREATE TABLE if not exists adv_count (
        traincount smallint,
        PRIMARY KEY (uid))""")
 result = cursor.fetchall()
-print result
+#print result
 
 cursor.execute("""CREATE TABLE if not exists adv_elev (
        uid MEDIUMINT NOT NULL AUTO_INCREMENT, 
@@ -65,7 +65,7 @@ cursor.execute("""CREATE TABLE if not exists adv_elev (
        expires varchar(28),
        PRIMARY KEY (uid))""")
 result = cursor.fetchall()
-print result
+#print result
 
 cursor.execute("""CREATE TABLE if not exists sched_special (
        uid MEDIUMINT NOT NULL AUTO_INCREMENT, 
@@ -82,7 +82,7 @@ cursor.execute("""CREATE TABLE if not exists sched_special (
        routes_affected text,
        PRIMARY KEY (uid))""")
 result = cursor.fetchall()
-print result
+#print result
 
 cursor.execute("""CREATE TABLE if not exists rout_routes (
        uid MEDIUMINT NOT NULL AUTO_INCREMENT, 
@@ -95,7 +95,7 @@ cursor.execute("""CREATE TABLE if not exists rout_routes (
        color varchar(7),
        PRIMARY KEY (uid))""")
 result = cursor.fetchall()
-print result
+#print result
 
 cursor.execute("""CREATE TABLE if not exists rout_routeinfo (
        uid MEDIUMINT NOT NULL AUTO_INCREMENT, 
@@ -114,7 +114,7 @@ cursor.execute("""CREATE TABLE if not exists rout_routeinfo (
        stations text,
        PRIMARY KEY (uid))""")
 result = cursor.fetchall()
-print result
+#print result
 
 cursor.execute("""CREATE TABLE if not exists rt_etd (
        uid MEDIUMINT NOT NULL AUTO_INCREMENT, 
@@ -134,7 +134,7 @@ cursor.execute("""CREATE TABLE if not exists rt_etd (
        bikeflag tinyint,
        PRIMARY KEY (uid))""")
 result = cursor.fetchall()
-print result
+#print result
 
 cursor.execute("""show tables;""")
 result = cursor.fetchall()
