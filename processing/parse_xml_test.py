@@ -1,6 +1,8 @@
 import xmltodict
 import datetime
 import pandas as pd
+import MySQLdb
+from mysql_cred import mysql_user, mysql_passowrd
 #from pprint import pprint
 
 
@@ -34,6 +36,8 @@ With delay message
   <message></message>
 </root>
 """
+
+con = MySQLdb.connect("localhost", mysql_user, mysql_passowrd, "test")
 
 with open('../data_collection/data/sentdata/adv_bsa_2015-06-03_23.txt', 'r') as readfile:
 	content = readfile.read().split('\n\n')
@@ -71,6 +75,8 @@ with open('../data_collection/data/sentdata/adv_bsa_2015-06-03_23.txt', 'r') as 
 
 				df = df.append(df_append, ignore_index=True)
 				print df.head
+
+				df.to_sql(con = con, name = 'adv_bsa', if_exists = 'append', flavor = 'mysql')
 			
 
 
