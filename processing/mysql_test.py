@@ -121,7 +121,7 @@ cursor.execute("""CREATE TABLE if not exists rt_etd (
        abbr varchar(4),
        destination varchar(40),
        abbreviation varchar(4),
-       minute smallint,
+       minutes varchar(10),
        platform tinyint,
        direction varchar(5),
        length tinyint,

@@ -235,15 +235,15 @@ def sched_special(date_hour, fetchtimes_subset):
 			fetchtime = fetchtimes_subset[i]
 			raw = xmltodict.parse(c)
 
-			schedules = raw['root']['special_schedules']
-			for schedule in schedules:
-				special_schedule = schedule['special_schedule']
+			schedules = raw['root']['special_schedules']['special_schedule']
+			for special_schedule in schedules:
+				#special_schedule = schedule['special_schedule']
 				start_date = special_schedule['start_date']
 				end_date = special_schedule['end_date']
 				start_time = special_schedule['start_time']
 				end_time = special_schedule['end_time']
-				text_ = special_schedule['posted']
-				link = special_schedule['expires']
+				text_ = special_schedule['text']
+				link = special_schedule['link']
 				orig = special_schedule['orig']
 				dest = special_schedule['dest']
 				day_of_week = special_schedule['day_of_week']
@@ -294,15 +294,15 @@ def rout_routes(date_hour, fetchtimes_subset):
 
 			sched_num = raw['root']['sched_num']
 
-			routes = raw['root']['routes']
-			for r in routes:
-				route = r['route']
+			routes = raw['root']['routes']['route']
+			for route in routes:
+				#route = r['route']
 				name = route['name']
 				abbr = route['abbr']
-				routeid = route['routeid']
+				routeid = route['routeID']
 				number = route['number']
 				color = route['color']
-				to_db.append((fetchtime, name, abbr, routeid, number, color))
+				to_db.append((fetchtime, sched_num, name, abbr, routeid, number, color))
 
 
 		cursor = con.cursor()
@@ -372,12 +372,12 @@ def rout_routeinfo(date_hour, fetchtimes_subset):
 
 			sched_num = raw['root']['sched_num']
 
-			routes = raw['root']['routes']
-			for r in routes:
-				route = r['route']
+			routes = raw['root']['routes']['route']
+			for route in routes:
+				#route = r['route']
 				name = route['name']
 				abbr = route['abbr']
-				routeid = route['routeid']
+				routeid = route['routeID']
 				number = route['number']
 				origin = route['origin']
 				destination = route['destination']
@@ -387,9 +387,9 @@ def rout_routeinfo(date_hour, fetchtimes_subset):
 				num_stns = route['num_stns']
 
 				s = []
-				config = route['config']
+				config = route['config']['station']
 				for c in config:
-					s.append(c['station'])
+					s.append(c)
 				stations = ",".join(s)
 
 
@@ -479,21 +479,68 @@ def rt_etd(date_hour, fetchtimes_subset):
 			for station in raw['root']['station']:
 				name = station['name']
 				abbr = station['abbr']
-				for etd in station['etd']:
+
+				etd_type = type(station['etd'])
+
+				if etd_type == list:
+					for etd in station['etd']:
+						destination = etd['destination']
+						abbreviation = etd['abbreviation']
+
+						estimate_type = type(etd['estimate'])
+
+						if estimate_type == list:
+							for estimate in etd['estimate']:
+								minutes = estimate['minutes']
+								platform = estimate['platform']
+								direction = estimate['direction']
+								length = estimate['length']
+								color = estimate['color']
+								hexcolor = estimate['hexcolor']
+								bikeflag = estimate['bikeflag']
+								to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
+						else:
+							estimate = etd['estimate']
+							minutes = estimate['minutes']
+							platform = estimate['platform']
+							direction = estimate['direction']
+							length = estimate['length']
+							color = estimate['color']
+							hexcolor = estimate['hexcolor']
+							bikeflag = estimate['bikeflag']
+							to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
+
+				else:
+					etd = station['etd']
 					destination = etd['destination']
 					abbreviation = etd['abbreviation']
-					for estimate in etd['estimate']:
-						minute = estimate['minute']
+
+					estimate_type = type(etd['estimate'])
+
+					if estimate_type == list:
+						for estimate in etd['estimate']:
+							minutes = estimate['minutes']
+							platform = estimate['platform']
+							direction = estimate['direction']
+							length = estimate['length']
+							color = estimate['color']
+							hexcolor = estimate['hexcolor']
+							bikeflag = estimate['bikeflag']
+							to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
+					else:
+						estimate = etd['estimate']
+						minutes = estimate['minutes']
 						platform = estimate['platform']
 						direction = estimate['direction']
 						length = estimate['length']
 						color = estimate['color']
 						hexcolor = estimate['hexcolor']
 						bikeflag = estimate['bikeflag']
-						to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minute, platform, direction, length, color, hexcolor, bikeflag))
+						to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
+
 
 		cursor = con.cursor()
-		cursor.executemany("""INSERT INTO rt_etd (fetchtime, date, time, name, abbr, destination, abbreviation, minute, platform, direction, length, color, hexcolor, bikeflag) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
+		cursor.executemany("""INSERT INTO rt_etd (fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
 		print "Records written: " + str(len(to_db))
 
