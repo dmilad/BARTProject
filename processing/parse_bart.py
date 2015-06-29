@@ -82,6 +82,7 @@ def adv_bsa(date_hour, fetchtimes_subset):
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO adv_bsa (fetchtime, date, time, id, station, type, description, posted, expires) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
+		con.commit()
 		print "\t\tadv_bsa - Records written: " + str(len(to_db))
 
 
@@ -117,6 +118,7 @@ def adv_count(date_hour, fetchtimes_subset):
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO adv_count (fetchtime, date, time, traincount) VALUES (%s, %s, %s, %s)""", to_db)
 		cursor.close()
+		con.commit()
 		print "\t\tadv_count - Records written: " + str(len(to_db))
 
 
@@ -186,6 +188,7 @@ def adv_elev(date_hour, fetchtimes_subset):
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO adv_elev (fetchtime, date, time, id, station, type, description, posted, expires) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
+		con.commit()
 		print "\t\tadv_elev - Records written: " + str(len(to_db))
 
 
@@ -250,6 +253,7 @@ def sched_special(date_hour, fetchtimes_subset):
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO sched_special (fetchtime, start_date, end_date, start_time, end_time, text_, link, orig, dest, day_of_week, routes_affected) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
+		con.commit()
 		print "\t\tsched_special - Records written: " + str(len(to_db))
 
 
@@ -304,6 +308,7 @@ def rout_routes(date_hour, fetchtimes_subset):
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO rout_routes (fetchtime, sched_num, name, abbr, routeid, number, color) VALUES (%s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
+		con.commit()
 		print "\t\trout_routes - Records written: " + str(len(to_db))
 
 
@@ -395,6 +400,7 @@ def rout_routeinfo(date_hour, fetchtimes_subset):
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO rout_routeinfo (fetchtime, sched_num, name, abbr, routeid, number, origin, destination, direction, color, holidays, num_stns, stations) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
+		con.commit()
 		print "\t\trout_routeinfo - Records written: " + str(len(to_db))
 
 
@@ -538,6 +544,7 @@ def rt_etd(date_hour, fetchtimes_subset):
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO rt_etd (fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
+		con.commit()
 		print "\t\trt_etd - Records written: " + str(len(to_db))
 
 

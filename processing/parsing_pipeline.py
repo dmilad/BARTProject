@@ -136,7 +136,7 @@ def start():
 
 
 if __name__ == "__main__":
-
+	bart_pipeline()
 	#run this forever
 	while True:
 
