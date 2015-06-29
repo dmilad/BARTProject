@@ -3,7 +3,7 @@ import datetime
 import MySQLdb
 from mysql_cred import mysql_user, mysql_passowrd, mysql_database
 
-def adv_bsa(date_hour, fetchtimes_subset):
+def adv_bsa(date_hour, fetchtimes_subset, con):
 	"""
 	Currently all BSA messages have a station code of "BART" signifying that they are system-wide. If future messages are tagged for specific stations, and a station is specified in the orig parameter, information will be provided for the specified station as well as any system-wide tagged messages. To get all messages, regardless of tags, specify "orig=all".
 
@@ -33,7 +33,7 @@ def adv_bsa(date_hour, fetchtimes_subset):
 	</root>
 	"""
 
-	with open('to_parse/adv_bsa_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
+	with open('to_parse/adv_bsa_' + date_hour.split(' ')[0] + '_' + str(int(date_hour.split(' ')[1])) + '.txt', 'r') as readfile:
 		content = readfile.read().split('\n\n')
 
 		to_db = []
@@ -86,7 +86,7 @@ def adv_bsa(date_hour, fetchtimes_subset):
 		print "\t\tadv_bsa - Records written: " + str(len(to_db))
 
 
-def adv_count(date_hour, fetchtimes_subset):
+def adv_count(date_hour, fetchtimes_subset, con):
 	"""
 	XML results Sample
 
@@ -100,7 +100,7 @@ def adv_count(date_hour, fetchtimes_subset):
 	</root>
 	"""
 	
-	with open('to_parse/adv_count_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
+	with open('to_parse/adv_count_' + date_hour.split(' ')[0] + '_' + str(int(date_hour.split(' ')[1])) + '.txt', 'r') as readfile:
 		content = readfile.read().split('\n\n')
 
 		to_db = []
@@ -122,7 +122,7 @@ def adv_count(date_hour, fetchtimes_subset):
 		print "\t\tadv_count - Records written: " + str(len(to_db))
 
 
-def adv_elev(date_hour, fetchtimes_subset):
+def adv_elev(date_hour, fetchtimes_subset, con):
 	"""
 	XML results sample
 
@@ -139,7 +139,7 @@ def adv_elev(date_hour, fetchtimes_subset):
 	</root>
 	"""
 	
-	with open('to_parse/adv_elev_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
+	with open('to_parse/adv_elev_' + date_hour.split(' ')[0] + '_' + str(int(date_hour.split(' ')[1])) + '.txt', 'r') as readfile:
 		content = readfile.read().split('\n\n')
 
 		to_db = []
@@ -192,7 +192,7 @@ def adv_elev(date_hour, fetchtimes_subset):
 		print "\t\tadv_elev - Records written: " + str(len(to_db))
 
 
-def sched_special(date_hour, fetchtimes_subset):
+def sched_special(date_hour, fetchtimes_subset, con):
 	"""
 	Occasionally BART has special schedule announcements that affect certain stations (construction, etc.). If a trip is requested from the API, a message will be appended to the trip results stating that a special message may pertain to the trip. This API call provides all current and future special schedule notices. A notice is considered current or future if the end date is greater than or equal to the date the call is made.
 
@@ -224,7 +224,7 @@ def sched_special(date_hour, fetchtimes_subset):
 	If there is a related news article, then the link element will provide a URL to a BART news story.
 	"""
 	
-	with open('to_parse/sched_special_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
+	with open('to_parse/sched_special_' + date_hour.split(' ')[0] + '_' + str(int(date_hour.split(' ')[1])) + '.txt', 'r') as readfile:
 		content = readfile.read().split('\n\n')
 
 		to_db = []
@@ -257,7 +257,7 @@ def sched_special(date_hour, fetchtimes_subset):
 		print "\t\tsched_special - Records written: " + str(len(to_db))
 
 
-def rout_routes(date_hour, fetchtimes_subset):
+def rout_routes(date_hour, fetchtimes_subset, con):
 	"""
 	Route Information sometimes changes with schedule changes as routes are reconfigured. This may affect the name and abbreviation of the route.
 	The optional "date" and "sched" parameters should not be used together. If they are, the date will be ignored, and the sched parameter will be used.
@@ -282,7 +282,7 @@ def rout_routes(date_hour, fetchtimes_subset):
 	</root>
 	"""
 	
-	with open('to_parse/rout_routes_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
+	with open('to_parse/rout_routes_' + date_hour.split(' ')[0] + '_' + str(int(date_hour.split(' ')[1])) + '.txt', 'r') as readfile:
 		content = readfile.read().split('\n\n')
 
 		to_db = []
@@ -312,7 +312,7 @@ def rout_routes(date_hour, fetchtimes_subset):
 		print "\t\trout_routes - Records written: " + str(len(to_db))
 
 
-def rout_routeinfo(date_hour, fetchtimes_subset):
+def rout_routeinfo(date_hour, fetchtimes_subset, con):
 	"""
 	Route information is sometimes updated with schedule changes as routes are reconfigured. This may affect the name and abbreviation of the route, as well as the number of stations.
 	The optional "date" and "sched" parameters should not be used together. If they are, the date will be ignored, and the sched parameter will be used.
@@ -361,7 +361,7 @@ def rout_routeinfo(date_hour, fetchtimes_subset):
 	</root>
 	"""
 	
-	with open('to_parse/rout_routeinfo_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
+	with open('to_parse/rout_routeinfo_' + date_hour.split(' ')[0] + '_' + str(int(date_hour.split(' ')[1])) + '.txt', 'r') as readfile:
 		content = readfile.read().split('\n\n')
 
 		to_db = []
@@ -404,7 +404,7 @@ def rout_routeinfo(date_hour, fetchtimes_subset):
 		print "\t\trout_routeinfo - Records written: " + str(len(to_db))
 
 
-def rt_etd(date_hour, fetchtimes_subset):
+def rt_etd(date_hour, fetchtimes_subset, con):
 	"""
 	The optional parameters 'plat' and 'dir' should not be used together. If they are, then the 'dir' parameter will be ignored and just the platform parameter will be used.
 
@@ -465,7 +465,7 @@ def rt_etd(date_hour, fetchtimes_subset):
 	If the combination of 'platform' or 'dir' results in no ETD data, a warning message will be displayed.
 	"""
 	
-	with open('to_parse/rt_etd_' + date_hour.replace(' ', '_') + '.txt', 'r') as readfile:
+	with open('to_parse/rt_etd_' + date_hour.split(' ')[0] + '_' + str(int(date_hour.split(' ')[1])) + '.txt', 'r') as readfile:
 		content = readfile.read().split('\n\n')
 
 		to_db = []
@@ -563,13 +563,13 @@ def main(date):
 		print "\tParsing files corresponding to " + date_hour + "..."
 		fetchtimes_subset = [f for f in fetchtimes if f[:13] == date_hour]
 
-		adv_bsa(date_hour, fetchtimes_subset)
-		adv_count(date_hour, fetchtimes_subset)
-		adv_elev(date_hour, fetchtimes_subset)
-		sched_special(date_hour, fetchtimes_subset)
-		rout_routes(date_hour, fetchtimes_subset)
-		rout_routeinfo(date_hour, fetchtimes_subset)
-		rt_etd(date_hour, fetchtimes_subset)
+		adv_bsa(date_hour, fetchtimes_subset, con)
+		adv_count(date_hour, fetchtimes_subset, con)
+		adv_elev(date_hour, fetchtimes_subset, con)
+		sched_special(date_hour, fetchtimes_subset, con)
+		rout_routes(date_hour, fetchtimes_subset, con)
+		rout_routeinfo(date_hour, fetchtimes_subset, con)
+		rt_etd(date_hour, fetchtimes_subset, con)
 
 	con.commit()
 	con.close()
