@@ -28,7 +28,7 @@ cursor.execute("""drop table if exists sched_special;""")
 #create all tables
 
 cursor.execute("""CREATE TABLE if not exists adv_bsa (
-       uid MEDIUMINT NOT NULL AUTO_INCREMENT, 
+       uid bigint NOT NULL AUTO_INCREMENT, 
        fetchtime varchar(26), 
        date varchar(10), 
        time varchar(15), 
@@ -43,7 +43,7 @@ result = cursor.fetchall()
 #print result
 
 cursor.execute("""CREATE TABLE if not exists adv_count (
-       uid MEDIUMINT NOT NULL AUTO_INCREMENT, 
+       uid bigint NOT NULL AUTO_INCREMENT, 
        fetchtime varchar(26), 
        date varchar(10), 
        time varchar(15), 
@@ -53,7 +53,7 @@ result = cursor.fetchall()
 #print result
 
 cursor.execute("""CREATE TABLE if not exists adv_elev (
-       uid MEDIUMINT NOT NULL AUTO_INCREMENT, 
+       uid bigint NOT NULL AUTO_INCREMENT, 
        fetchtime varchar(26), 
        date varchar(10), 
        time varchar(15), 
@@ -68,7 +68,7 @@ result = cursor.fetchall()
 #print result
 
 cursor.execute("""CREATE TABLE if not exists sched_special (
-       uid MEDIUMINT NOT NULL AUTO_INCREMENT, 
+       uid bigint NOT NULL AUTO_INCREMENT, 
        fetchtime varchar(26), 
        start_date varchar(10), 
        end_date varchar(10), 
@@ -85,7 +85,7 @@ result = cursor.fetchall()
 #print result
 
 cursor.execute("""CREATE TABLE if not exists rout_routes (
-       uid MEDIUMINT NOT NULL AUTO_INCREMENT, 
+       uid bigint NOT NULL AUTO_INCREMENT, 
        fetchtime varchar(26), 
        sched_num smallint,
        name text,
@@ -98,7 +98,7 @@ result = cursor.fetchall()
 #print result
 
 cursor.execute("""CREATE TABLE if not exists rout_routeinfo (
-       uid MEDIUMINT NOT NULL AUTO_INCREMENT, 
+       uid bigint NOT NULL AUTO_INCREMENT, 
        fetchtime varchar(26),
        sched_num smallint, 
        name text,
@@ -117,7 +117,7 @@ result = cursor.fetchall()
 #print result
 
 cursor.execute("""CREATE TABLE if not exists rt_etd (
-       uid MEDIUMINT NOT NULL AUTO_INCREMENT, 
+       uid bigint NOT NULL AUTO_INCREMENT, 
        fetchtime varchar(26),
        date varchar(10),
        time varchar(15),
