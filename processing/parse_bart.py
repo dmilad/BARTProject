@@ -478,7 +478,9 @@ def rt_etd(date_hour, fetchtimes_subset, con):
 			date = raw['root']['date']
 			time = raw['root']['time']
 
-			if raw['root']['station'] == list:
+			station_type = type(raw['root']['station'])
+
+			if station_type == list:
 				for station in raw['root']['station']:
 					name = station['name']
 					abbr = station['abbr']
@@ -541,7 +543,7 @@ def rt_etd(date_hour, fetchtimes_subset, con):
 							bikeflag = estimate['bikeflag']
 							to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
 			else:
-				station = raw['root']['station']:
+				station = raw['root']['station']
 				name = station['name']
 				abbr = station['abbr']
 
