@@ -478,7 +478,70 @@ def rt_etd(date_hour, fetchtimes_subset, con):
 			date = raw['root']['date']
 			time = raw['root']['time']
 
-			for station in raw['root']['station']:
+			if raw['root']['station'] == list:
+				for station in raw['root']['station']:
+					name = station['name']
+					abbr = station['abbr']
+
+					etd_type = type(station['etd'])
+
+					if etd_type == list:
+						for etd in station['etd']:
+							destination = etd['destination']
+							abbreviation = etd['abbreviation']
+
+							estimate_type = type(etd['estimate'])
+
+							if estimate_type == list:
+								for estimate in etd['estimate']:
+									minutes = estimate['minutes']
+									platform = estimate['platform']
+									direction = estimate['direction']
+									length = estimate['length']
+									color = estimate['color']
+									hexcolor = estimate['hexcolor']
+									bikeflag = estimate['bikeflag']
+									to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
+							else:
+								estimate = etd['estimate']
+								minutes = estimate['minutes']
+								platform = estimate['platform']
+								direction = estimate['direction']
+								length = estimate['length']
+								color = estimate['color']
+								hexcolor = estimate['hexcolor']
+								bikeflag = estimate['bikeflag']
+								to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
+
+					else:
+						etd = station['etd']
+						destination = etd['destination']
+						abbreviation = etd['abbreviation']
+
+						estimate_type = type(etd['estimate'])
+
+						if estimate_type == list:
+							for estimate in etd['estimate']:
+								minutes = estimate['minutes']
+								platform = estimate['platform']
+								direction = estimate['direction']
+								length = estimate['length']
+								color = estimate['color']
+								hexcolor = estimate['hexcolor']
+								bikeflag = estimate['bikeflag']
+								to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
+						else:
+							estimate = etd['estimate']
+							minutes = estimate['minutes']
+							platform = estimate['platform']
+							direction = estimate['direction']
+							length = estimate['length']
+							color = estimate['color']
+							hexcolor = estimate['hexcolor']
+							bikeflag = estimate['bikeflag']
+							to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
+			else:
+				station = raw['root']['station']:
 				name = station['name']
 				abbr = station['abbr']
 
