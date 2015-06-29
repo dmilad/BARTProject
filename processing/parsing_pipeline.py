@@ -121,6 +121,7 @@ def start():
 		#the purpose of the "started" boolean to make sure we dont send same files twice in the first minute
 		try:
 			if fetchtime.minute == 15 and not started:
+				print "Start bart pipeline..."
 				bart_pipeline()
 				started = True
 			else:
@@ -141,6 +142,7 @@ if __name__ == "__main__":
 
 		#if there is an error, try again in 60 seconds
 		try:
+			print "Starting..."
 			start()
 		except Exception, e:
 			print "Error: ", e
