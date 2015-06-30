@@ -633,43 +633,43 @@ def get_record_counts(con):
 	cursor = con.cursor()
 	cursor.execute("""select count(*) from adv_bsa;""")
 	result = cursor.fetchall()
-	print "Records in adv_bsa: " + result
+	print "Records in adv_bsa: " + str(result)
 	cursor.close()
 
 	cursor = con.cursor()
 	cursor.execute("""select count(*) from adv_count;""")
 	result = cursor.fetchall()
-	print "Records in adv_count: " + result
+	print "Records in adv_count: " + str(result)
 	cursor.close()
 
 	cursor = con.cursor()
 	cursor.execute("""select count(*) from adv_elev;""")
 	result = cursor.fetchall()
-	print "Records in adv_elev: " + result
+	print "Records in adv_elev: " + str(result)
 	cursor.close()
 
 	cursor = con.cursor()
 	cursor.execute("""select count(*) from sched_special;""")
 	result = cursor.fetchall()
-	print "Records in sched_special: " + result
+	print "Records in sched_special: " + str(result)
 	cursor.close()
 
 	cursor = con.cursor()
 	cursor.execute("""select count(*) from rout_routes;""")
 	result = cursor.fetchall()
-	print "Records in rout_routes: " + result
+	print "Records in rout_routes: " + str(result)
 	cursor.close()
 
 	cursor = con.cursor()
 	cursor.execute("""select count(*) from rout_routeinfo;""")
 	result = cursor.fetchall()
-	print "Records in rout_routeinfo: " + result
+	print "Records in rout_routeinfo: " + str(result)
 	cursor.close()
 
 	cursor = con.cursor()
 	cursor.execute("""select count(*) from rt_etd;""")
 	result = cursor.fetchall()
-	print "Records in rt_etd: " + result
+	print "Records in rt_etd: " + str(result)
 	cursor.close()
 
 
@@ -698,7 +698,7 @@ def main(date):
 
 	con.commit()
 
-		get_record_counts(con)
+	get_record_counts(con)
 
 	con.close()
 
