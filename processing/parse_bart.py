@@ -698,7 +698,7 @@ def main(date):
 
 	con.commit()
 
-		get_record_counts(con)
+	get_record_counts(con)
 
 	con.close()
 
