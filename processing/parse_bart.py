@@ -688,7 +688,8 @@ def main(date):
 	cursor.execute("""select distinct substring(fetchtime, 1,13) from adv_bsa where fetchtime like '%2015-06-30%';""")
 	result = cursor.fetchall()
 	written = [r[0] for r in result]
-
+	cursor.close()
+	
 	date_hours = list(set(date_hours) - set(written))
 
 	for date_hour in date_hours:
