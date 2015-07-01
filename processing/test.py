@@ -18,7 +18,7 @@ print "Grabbing list of fetch_time files..."
 for pre in fts_pre:
 	prestr = pre.__str__()
 	try:
-		match = re.search(dump_container + ', (.*special_2015-06-29_.*)\.txt', prestr)
+		match = re.search(dump_container + ', (fetch_times_.*)\.txt', prestr)
 		fts.append(match.group(1) + '.txt')
 	except:
 		pass
@@ -34,9 +34,9 @@ for ft in fts:
 
 
 
-to_send = os.walk('../data/sentdata').next()[1]
-to_send = [x for x in to_send if '2015-06-29' in x]
-print to_send
+#to_send = os.walk('../data/sentdata').next()[1]
+#to_send = [x for x in to_send if '2015-06-29' in x]
+#print to_send
 
 #print "Sending files for archive container..."
 #for i, item in enumerate(to_send):

@@ -683,6 +683,13 @@ def main(date):
 
 	#print fetchtimes
 	date_hours = list(set([f[:13] for f in fetchtimes if len(f) > 1]))
+	
+	cursor = con.cursor()
+	cursor.execute("""select distinct substring(fetchtime, 1,13) from adv_bsa where fetchtime like '%2015-06-30%';""")
+	result = cursor.fetchall()
+	written = [r[0] for r in result]
+
+	date_hours = list(set(date_hours) - set(written))
 
 	for date_hour in date_hours:
 		print "\tParsing files corresponding to " + date_hour + "..."
