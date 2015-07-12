@@ -1,4 +1,4 @@
-import MySQLdb
+#import MySQLdb
 from mysql_cred import mysql_user, mysql_passowrd, mysql_database
 import sys
 
@@ -175,13 +175,13 @@ def create_weather(cursor):
 	for i in range(40):
 		col_names += [c+"_"+str((i+1)*3) for c in forecast_cols]
 
-	col_types = ["varchar(19,", "varchar(21),"]
+	col_types = ["varchar(19),", "varchar(21),"]
 	for i in range(40):
 		col_types += c_types
 
 	weather_forecast_query = ""
 	for a, b in zip(col_names, col_types):
-		weather_forecast_query += a + " " + b + " "
+		weather_forecast_query += a + " " + b + " \n"
 
 	weather_forecast_query = "CREATE TABLE if not exists weather_forecast (uid bigint NOT NULL AUTO_INCREMENT, " + weather_forecast_query + "PRIMARY KEY (uid))"
 

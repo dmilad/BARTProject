@@ -5,28 +5,55 @@ import time, datetime
 from swift_cred import sl_user_name, sl_api_key, sl_data_center
 
 
-sl_storage = object_storage.get_client(sl_user_name, sl_api_key, datacenter = sl_data_center)
+forecast_cols = ["clouds", "detailed_status", "dewpoint", "heat_index", "humidex", "humidity", "pressure_pres", "pressure_sea_level", "rain", "reference_time", "snow", "status", "sunrise_time", "sunset_time", "temperature_temp", "temperature_temp_kf", "temperature_temp_max", "temperature_temp_min", "visibility_dist", "weather_code", "wind_deg", "wind_speed"]
 
-dump_container = 'bart_dump'
-archive_container = 'bart_archive'
+col_names = ['reception_time', 'location']
+for i in range(40):
+	col_names += [c+"_"+str((i+1)*3) for c in forecast_cols]
 
-#grab all fetchtimes
-fts_pre = sl_storage[dump_container].objects()
-fts = []
+print len(col_names)
 
-print "Grabbing list of fetch_time files..."
-for pre in fts_pre:
-	prestr = pre.__str__()
-	try:
-		match = re.search(dump_container + ', (fetch_times_.*)\.txt', prestr)
-		fts.append(match.group(1) + '.txt')
-	except:
-		pass
+values = ["%s" for i in range(len(col_names))]
+
+print len(values)
+
+col_names = "("+", ".join(col_names)+")"
+values = "("+", ".join(values)+")"
 
 
-#for each fetchtime
-for ft in fts:
-	print "Reading " + ft
+
+
+
+#sl_storage = object_storage.get_client(sl_user_name, sl_api_key, datacenter = sl_data_center)
+#
+#dump_container = 'bart_dump'
+#archive_container = 'bart_archive'
+#
+##grab all fetchtimes
+#fts_pre = sl_storage[dump_container].objects()
+#fts = []
+#
+#print "Grabbing list of fetch_time files..."
+#for pre in fts_pre:
+#	prestr = pre.__str__()
+#	try:
+#		match = re.search(dump_container + ', (fetch_times_.*)\.txt', prestr)
+#		fts.append(match.group(1) + '.txt')
+#	except:
+#		pass
+#
+#
+##for each fetchtime
+#for ft in fts:
+#	print "Reading " + ft
+
+
+
+
+
+
+
+
 
 #for f in fts:
 #	sl_storage[dump_container][f].delete()

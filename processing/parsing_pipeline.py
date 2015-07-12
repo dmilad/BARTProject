@@ -243,9 +243,10 @@ if __name__ == "__main__":
 	col_names = ['reception_time', 'location']
 	for i in range(40):
 		col_names += [c+"_"+str((i+1)*3) for c in forecast_cols]
-	col_names = "("+", ".join(col_names)+")"
 
 	values = ["%s" for i in range(len(col_names))]
+
+	col_names = "("+", ".join(col_names)+")"
 	values = "("+", ".join(values)+")"
 
 	weather_pipeline(col_names, values)
