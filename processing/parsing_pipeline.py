@@ -4,9 +4,11 @@ import os
 import time, datetime
 from swift_cred import sl_user_name, sl_api_key, sl_data_center
 import parse_bart
+import parse_weather
 
 
 def bart_pipeline():
+	#create storage client object
 	sl_storage = object_storage.get_client(sl_user_name, sl_api_key, datacenter = sl_data_center)
 
 	dump_container = 'bart_dump'
@@ -24,7 +26,6 @@ def bart_pipeline():
 			fts.append(match.group(1) + '.txt')
 		except:
 			pass
-
 
 	#for each fetchtime
 	for ft in fts:
@@ -110,24 +111,123 @@ def bart_pipeline():
 
 
 
-def start():
-	started = False
+
+def weather_pipeline(col_names, values):
+	#create storage client object
+	sl_storage = object_storage.get_client(sl_user_name, sl_api_key, datacenter = sl_data_center)
+
+	dump_container = 'weather_dump'
+	archive_container = 'weather_archive'
+
+	#grab list of file names
+	w_files_full = sl_storage[dump_container].objects()
+	w_files = []
+
+	#process 100 max at a time
+	while len(w_files_full) > 100:
+		w_files_pre = w_files_full[:100]
+		w_files_full = list(set(w_files_full) - set(w_files_pre))
+
+		print "Grabbing list of files..."
+		for pre in w_files_pre:
+			prestr = pre.__str__()
+			try:
+				match = re.search(dump_container + ', (.*)\.txt', prestr)
+				w_files.append(match.group(1) + '.txt')
+			except:
+				pass
+
+
+		#for each file
+		for w_file in w_files:
+			print "Reading " + w_file
+			#read file from object_store and write to to_parse_weather
+			newLocalFile = open('to_parse_weather/'+w_file, "w")
+			swiftObject = sl_storage[dump_container][w_file].read()
+			newLocalFile.write(swiftObject)
+			newLocalFile.close()
+
+			print "Parsing..."
+			parse_weather.main(w_file, col_names, values)
+
+		to_send = w_files
+
+		print "Sending files for archive container..."
+		for i, item in enumerate(to_send):
+			print "Sending file " + str(i + 1) + ": " + item
+			fullfilename = 'to_parse_weather/' + item
+			with open(fullfilename, 'r') as readfile:
+				sl_storage[archive_container][readfile.name.split('/')[-1]].send(readfile)
+		print 'Data files sent to object store.'
+
+
+		#if they got there safely... 
+		#delete them from local disk and remove them from dump_container
+		sentfiles_pre = sl_storage[archive_container].objects()
+		sentfiles = []
+		for pre in sentfiles_pre:
+			prestr = pre.__str__()
+			try:
+				match = re.search(archive_container + ', (.*)\.txt', prestr)
+				sentfiles.append(match.group(1) + '.txt')
+			except:
+				pass
+		print sentfiles
+
+		success = True
+		for t in to_send:
+			if t not in sentfiles:
+				success = False
+
+		if success:
+			#delete locally
+			for f in to_send:
+				os.remove('to_parse_weather/'+f)
+			print 'Deleted batch of local weather files.'
+			
+			#delete from dump_container
+			for f in to_send:
+				sl_storage[dump_container][f].delete()
+			print 'Deleted batch of dump weather files.'
+
+
+		else:
+			print 'Error: batch of weather files did not get to ' + archive_container + '. Try again later.'
+
+
+
+
+def start(col_names, values):
+	#the purpose of the "started" boolean is to make sure we dont send same files twice
+	bart_started = False
+	weather_started = False
+
 	while True:
 		#used to time 30 seconds between requests
 		start_time = time.time()
 		fetchtime = datetime.datetime.today()
 
- 		#in the fifteenth minute of every hour, start the pipeline. 
-		#the purpose of the "started" boolean to make sure we dont send same files twice in the first minute
+ 		#in the fifteenth minute of every hour, start the bart pipeline. 
 		try:
-			if fetchtime.minute == 15 and not started:
+			if fetchtime.minute == 15 and not bart_started:
 				print "Start bart pipeline..."
 				bart_pipeline()
-				started = True
+				bart_started = True
 			else:
-				started = False
+				bart_started = False
 		except Exception, e:
-			print "An error occurred. Parsing pipeline could not initiate at " + str(fetchtime), e
+			print "An error occurred. BART parsing pipeline could not initiate at " + str(fetchtime), e
+
+ 		#in the twentieth minute of every hour, start the weather pipeline. 
+		try:
+			if fetchtime.minute == 20 and not weather_started:
+				print "Start weather pipeline..."
+				weather_pipeline(col_names, values)
+				weather_started = True
+			else:
+				weather_started = False
+		except Exception, e:
+			print "An error occurred. Weather parsing pipeline could not initiate at " + str(fetchtime), e
 
 		#time 30 seconds between requests
 		end_time = time.time()
@@ -136,14 +236,26 @@ def start():
 
 
 if __name__ == "__main__":
-	bart_pipeline()
+
+	#some variables defined for weather
+	forecast_cols = ["clouds", "detailed_status", "dewpoint", "heat_index", "humidex", "humidity", "pressure_pres", "pressure_sea_level", "rain", "reference_time", "snow", "status", "sunrise_time", "sunset_time", "temperature_temp", "temperature_temp_kf", "temperature_temp_max", "temperature_temp_min", "visibility_dist", "weather_code", "wind_deg", "wind_speed"]
+
+	col_names = ['reception_time', 'location']
+	for i in range(40):
+		col_names += [c+"_"+str((i+1)*3) for c in forecast_cols]
+	col_names = "("+", ".join(col_names)+")"
+
+	values = ["%s" for i in range(len(col_names))]
+	values = "("+", ".join(values)+")"
+
+	weather_pipeline(col_names, values)
 	#run this forever
 	while True:
 
 		#if there is an error, try again in 60 seconds
 		try:
 			print "Starting..."
-			start()
+			start(col_names, values)
 		except Exception, e:
 			print "Error: ", e
 			print "Retrying in 60 seconds..."

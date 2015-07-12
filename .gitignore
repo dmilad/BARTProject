@@ -15,3 +15,5 @@ processing/to_parse
 processing/to_parse/*
 nitin/
 nitin/*
+processing/to_parse_weather
+processing/to_parse_weather/*
