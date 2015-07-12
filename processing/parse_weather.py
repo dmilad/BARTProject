@@ -68,7 +68,7 @@ def parse_current_weather(w_file, con):
 
 			w_list = list(w_tuple)
 			for i, r in enumerate(w_list):
-				if r == 'None' or r == '':
+				if r == 'None' or r == '' or r == None:
 					w_list[i] = 'NULL'
 
 			w_tuple = tuple(w_list)
@@ -131,7 +131,7 @@ def parse_forecast_weather(w_file, con, col_names, values):
 
 			w_list = list(w_tuple)
 			for i, r in enumerate(w_list):
-				if r == 'None' or r == '':
+				if r == 'None' or r == '' or r == None:
 					w_list[i] = 'NULL'
 
 			w_tuple = tuple(w_list)
@@ -140,6 +140,9 @@ def parse_forecast_weather(w_file, con, col_names, values):
 				filler = tuple(('NULL' for i in range(882 - len(w_tuple))))
 				w_tuple += filler
 
+			if len(w_tuple) > 882:
+				w_tuple = w_tuple[:882]
+				
 			to_db.append(w_tuple)
 
 		cursor = con.cursor()
