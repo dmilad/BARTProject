@@ -13,3 +13,5 @@ bootstrap.txt
 processing/mysql_cred.py
 processing/to_parse
 processing/to_parse/*
+processing/to_parse_weather
+processing/to_parse_weather/*
