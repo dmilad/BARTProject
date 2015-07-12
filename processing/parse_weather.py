@@ -85,7 +85,7 @@ def parse_forecast_weather(w_file, con, col_names, values):
 			reception_time = datetime.datetime.fromtimestamp(int(raw['reception_time'])).strftime('%Y-%m-%d %H:%M:%S')
 			location = raw['Location']['name']
 
-			w_tuple = ((reception_time, location))
+			w_tuple = (reception_time, location)
 
 			weathers = raw['weathers']
 

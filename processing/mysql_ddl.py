@@ -195,14 +195,20 @@ def create_weather():
 
 
 if __name__ == "__main__":
+
+	con = MySQLdb.connect("localhost", mysql_user, mysql_passowrd, mysql_database)
+	cursor = con.cursor()
+
 	if sys.argv[1] == "drop_bart":
-		drop_bart()
+		drop_bart(cursor)
 	elif sys.argv[1] == "create_bart":
-		create_bart()
+		create_bart(cursor)
 	elif sys.argv[1] == "drop_weather":
-		drop_weather()
+		drop_weather(cursor)
 	elif sys.argv[1] == "create_weather":
-		create_weather()
+		create_weather(cursor)
 	else:
 		print "You need to specify an option: drop_bart, create_bart, drop_weather, create_weather"
+
+	con.close()
 
