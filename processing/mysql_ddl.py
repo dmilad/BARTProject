@@ -184,6 +184,7 @@ def create_weather(cursor):
 		weather_forecast_query += a + " " + b + " "
 
 	weather_forecast_query = "CREATE TABLE if not exists weather_forecast (uid bigint NOT NULL AUTO_INCREMENT, " + weather_forecast_query + "PRIMARY KEY (uid))"
+
 	cursor.execute(weather_forecast_query)
 	result = cursor.fetchall()
 	#print result
