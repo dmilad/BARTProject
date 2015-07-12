@@ -122,6 +122,11 @@ def parse_forecast_weather(w_file, con, col_names, values):
 
 				w_tuple = w_tuple + (clouds, detailed_status, dewpoint, heat_index, humidex, humidity, pressure_pres, pressure_sea_level, rain, reference_time, snow, status, sunrise_time, sunset_time, temperature_temp, temperature_temp_kf, temperature_temp_max, temperature_temp_min, visibility_dist, weather_code, wind_deg, wind_speed)
 
+			
+			if len(w_tuple) < 882:
+				filler = tuple(('Null' for i in range(882 - len(w_tuple))))
+				w_tuple += filler
+
 			to_db.append(w_tuple)
 
 		cursor = con.cursor()
