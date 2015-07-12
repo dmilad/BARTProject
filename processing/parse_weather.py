@@ -35,41 +35,41 @@ def parse_current_weather(w_file, con):
 
 			weather = raw['Weather']
 
-			clouds = weather['clouds']
-			detailed_status = weather['detailed_status']
-			dewpoint = weather['dewpoint']
-			heat_index = weather['heat_index']
-			humidex = weather['humidex']
-			humidity = weather['humidity']
-			pressure_pres = weather['pressure']['press']
-			pressure_sea_level = weather['pressure']['sea_level']
+			clouds = str(weather['clouds'])
+			detailed_status = str(weather['detailed_status'])
+			dewpoint = str(weather['dewpoint'])
+			heat_index = str(weather['heat_index'])
+			humidex = str(weather['humidex'])
+			humidity = str(weather['humidity'])
+			pressure_pres = str(weather['pressure']['press'])
+			pressure_sea_level = str(weather['pressure']['sea_level'])
 			try:
-				rain = weather['rain']['3h']
+				rain = str(weather['rain']['3h'])
 			except:
-				rain = 'Null'
+				rain = 'NULL'
 			reference_time = datetime.datetime.fromtimestamp(int(weather['reference_time'])).strftime('%Y-%m-%d %H:%M:%S')
 			try:
-				snow = weather['snow']['3h']
+				snow = str(weather['snow']['3h'])
 			except:
-				snow = 'Null'
-			status = weather['status']
+				snow = 'NULL'
+			status = str(weather['status'])
 			sunrise_time = datetime.datetime.fromtimestamp(int(weather['sunrise_time'])).strftime('%Y-%m-%d %H:%M:%S')
 			sunset_time = datetime.datetime.fromtimestamp(int(weather['sunset_time'])).strftime('%Y-%m-%d %H:%M:%S')
-			temperature_temp = weather['temperature']['temp']
-			temperature_temp_kf = weather['temperature']['temp_kf']
-			temperature_temp_max = weather['temperature']['temp_max']
-			temperature_temp_min = weather['temperature']['temp_min']
-			visibility_dist = weather['visibility_distance']
-			weather_code = weather['weather_code']
-			wind_deg = weather['wind']['deg']
-			wind_speed = weather['wind']['speed']
+			temperature_temp = str(weather['temperature']['temp'])
+			temperature_temp_kf = str(weather['temperature']['temp_kf'])
+			temperature_temp_max = str(weather['temperature']['temp_max'])
+			temperature_temp_min = str(weather['temperature']['temp_min'])
+			visibility_dist = str(weather['visibility_distance'])
+			weather_code = str(weather['weather_code'])
+			wind_deg = str(weather['wind']['deg'])
+			wind_speed = str(weather['wind']['speed'])
 
 			w_tuple = (reception_time, location, clouds, detailed_status, dewpoint, heat_index, humidex, humidity, pressure_pres, pressure_sea_level, rain, reference_time, snow, status, sunrise_time, sunset_time, temperature_temp, temperature_temp_kf, temperature_temp_max, temperature_temp_min, visibility_dist, weather_code, wind_deg, wind_speed)
 
 			w_list = list(w_tuple)
 			for i, r in enumerate(w_list):
 				if r == 'None' or r == '':
-					w_list[i] = 'Null'
+					w_list[i] = 'NULL'
 
 			w_tuple = tuple(w_list)
 			to_db.append(w_tuple)
@@ -98,47 +98,46 @@ def parse_forecast_weather(w_file, con, col_names, values):
 			weathers = raw['weathers']
 
 			for i, weather in enumerate(weathers):
-				clouds = weather['clouds']
-				detailed_status = weather['detailed_status']
-				dewpoint = weather['dewpoint']
-				heat_index = weather['heat_index']
-				humidex = weather['humidex']
-				humidity = weather['humidity']
-				pressure_pres = weather['pressure']['press']
-				pressure_sea_level = weather['pressure']['sea_level']
+				clouds = str(weather['clouds'])
+				detailed_status = str(weather['detailed_status'])
+				dewpoint = str(weather['dewpoint'])
+				heat_index = str(weather['heat_index'])
+				humidex = str(weather['humidex'])
+				humidity = str(weather['humidity'])
+				pressure_pres = str(weather['pressure']['press'])
+				pressure_sea_level = str(weather['pressure']['sea_level'])
 				try:
-					rain = weather['rain']['3h']
+					rain = str(weather['rain']['3h'])
 				except:
-					rain = 'Null'
+					rain = 'NULL'
 				reference_time = datetime.datetime.fromtimestamp(int(weather['reference_time'])).strftime('%Y-%m-%d %H:%M:%S')
-				snow = str(weather['snow'])
 				try:
-					snow = weather['snow']['3h']
+					snow = str(weather['snow']['3h'])
 				except:
-					snow = 'Null'
-				status = weather['status']
+					snow = 'NULL'
+				status = str(weather['status'])
 				sunrise_time = datetime.datetime.fromtimestamp(int(weather['sunrise_time'])).strftime('%Y-%m-%d %H:%M:%S')
 				sunset_time = datetime.datetime.fromtimestamp(int(weather['sunset_time'])).strftime('%Y-%m-%d %H:%M:%S')
-				temperature_temp = weather['temperature']['temp']
-				temperature_temp_kf = weather['temperature']['temp_kf']
-				temperature_temp_max = weather['temperature']['temp_max']
-				temperature_temp_min = weather['temperature']['temp_min']
-				visibility_dist = weather['visibility_distance']
-				weather_code = weather['weather_code']
-				wind_deg = weather['wind']['deg']
-				wind_speed = weather['wind']['speed']
+				temperature_temp = str(weather['temperature']['temp'])
+				temperature_temp_kf = str(weather['temperature']['temp_kf'])
+				temperature_temp_max = str(weather['temperature']['temp_max'])
+				temperature_temp_min = str(weather['temperature']['temp_min'])
+				visibility_dist = str(weather['visibility_distance'])
+				weather_code = str(weather['weather_code'])
+				wind_deg = str(weather['wind']['deg'])
+				wind_speed = str(weather['wind']['speed'])
 
 				w_tuple = w_tuple + (clouds, detailed_status, dewpoint, heat_index, humidex, humidity, pressure_pres, pressure_sea_level, rain, reference_time, snow, status, sunrise_time, sunset_time, temperature_temp, temperature_temp_kf, temperature_temp_max, temperature_temp_min, visibility_dist, weather_code, wind_deg, wind_speed)
 
 			w_list = list(w_tuple)
 			for i, r in enumerate(w_list):
 				if r == 'None' or r == '':
-					w_list[i] = 'Null'
+					w_list[i] = 'NULL'
 
 			w_tuple = tuple(w_list)
 
 			if len(w_tuple) < 882:
-				filler = tuple(('Null' for i in range(882 - len(w_tuple))))
+				filler = tuple(('NULL' for i in range(882 - len(w_tuple))))
 				w_tuple += filler
 
 			to_db.append(w_tuple)
