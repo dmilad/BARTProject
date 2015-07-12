@@ -121,13 +121,13 @@ def weather_pipeline(col_names, values):
 
 	#grab list of file names
 	w_files_full = sl_storage[dump_container].objects()
-	w_files = []
 
 	#process 100 max at a time
 	while len(w_files_full) > 100:
 		w_files_pre = w_files_full[:100]
 		w_files_full = list(set(w_files_full) - set(w_files_pre))
 
+		w_files = []
 		print "Grabbing list of files..."
 		for pre in w_files_pre:
 			prestr = pre.__str__()
