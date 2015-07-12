@@ -3,16 +3,15 @@ import re
 import os
 import time, datetime
 from swift_cred import sl_user_name, sl_api_key, sl_data_center
-import parse_bart
 
 
 def trans():
 	sl_storage = object_storage.get_client(sl_user_name, sl_api_key, datacenter = sl_data_center)
 
-	dump_container = 'bart_dump'
-	archive_container = 'bart_archive'
+	dump_container = 'weather_dump'
+	archive_container = 'weather_archive'
 
-	#grab all fetchtimes
+	#grab all files
 	fts_pre = sl_storage[archive_container].objects()
 	fts = []
 
@@ -38,7 +37,7 @@ def trans():
 
 	to_send = fts
 
-	print "Sending files for archive container..."
+	print "Sending files for dump container..."
 	for i, item in enumerate(to_send):
 		print "Sending file " + str(i + 1) + ": " + item
 		fullfilename = 'to_parse/' + item
