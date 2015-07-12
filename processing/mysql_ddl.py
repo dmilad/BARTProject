@@ -2,7 +2,7 @@ import MySQLdb
 from mysql_cred import mysql_user, mysql_passowrd, mysql_database
 import sys
 
-def drop_bart():
+def drop_bart(cursor):
 	#drop bart tables 
 	cursor.execute("""drop table if exists adv_bsa;""")
 	cursor.execute("""drop table if exists adv_count;""")
@@ -13,7 +13,7 @@ def drop_bart():
 	cursor.execute("""drop table if exists sched_special;""")
 
 
-def create_bart():
+def create_bart(cursor):
 	#create all bart tables
 	cursor.execute("""CREATE TABLE if not exists adv_bsa (
 	       uid bigint NOT NULL AUTO_INCREMENT, 
@@ -128,13 +128,13 @@ def create_bart():
 	result = cursor.fetchall()
 	print result
 
-def drop_weather():
+def drop_weather(cursor):
 	#drop weather tables 
 	cursor.execute("""drop table if exists weather_current;""")
 	cursor.execute("""drop table if exists weather_forecast;""")
 
 
-def create_weather():
+def create_weather(cursor):
 	#create all bart tables
 	cursor.execute("""CREATE TABLE if not exists weather_current (
 		uid bigint NOT NULL AUTO_INCREMENT,
