@@ -46,12 +46,12 @@ def parse_current_weather(w_file, con):
 			try:
 				rain = weather['rain']['3h']
 			except:
-				rain = 'None'
+				rain = 'Null'
 			reference_time = datetime.datetime.fromtimestamp(int(weather['reference_time'])).strftime('%Y-%m-%d %H:%M:%S')
 			try:
 				snow = weather['snow']['3h']
 			except:
-				snow = 'None'
+				snow = 'Null'
 			status = weather['status']
 			sunrise_time = datetime.datetime.fromtimestamp(int(weather['sunrise_time'])).strftime('%Y-%m-%d %H:%M:%S')
 			sunset_time = datetime.datetime.fromtimestamp(int(weather['sunset_time'])).strftime('%Y-%m-%d %H:%M:%S')
@@ -64,7 +64,15 @@ def parse_current_weather(w_file, con):
 			wind_deg = weather['wind']['deg']
 			wind_speed = weather['wind']['speed']
 
-			to_db.append((reception_time, location, clouds, detailed_status, dewpoint, heat_index, humidex, humidity, pressure_pres, pressure_sea_level, rain, reference_time, snow, status, sunrise_time, sunset_time, temperature_temp, temperature_temp_kf, temperature_temp_max, temperature_temp_min, visibility_dist, weather_code, wind_deg, wind_speed))
+			w_tuple = (reception_time, location, clouds, detailed_status, dewpoint, heat_index, humidex, humidity, pressure_pres, pressure_sea_level, rain, reference_time, snow, status, sunrise_time, sunset_time, temperature_temp, temperature_temp_kf, temperature_temp_max, temperature_temp_min, visibility_dist, weather_code, wind_deg, wind_speed)
+
+			w_list = list(w_tuple)
+			for i, r in enumerate(w_list):
+				if r == 'None' or r == '':
+					w_list[i] = 'Null'
+
+			w_tuple = tuple(w_list)
+			to_db.append(w_tuple)
 
 		cursor = con.cursor()
 		cursor.executemany("INSERT INTO weather_current (reception_time, location, clouds, detailed_status, dewpoint, heat_index, humidex, humidity, pressure_pres, pressure_sea_level, rain, reference_time, snow, status, sunrise_time, sunset_time, temperature_temp, temperature_temp_kf, temperature_temp_max, temperature_temp_min, visibility_dist, weather_code, wind_deg, wind_speed) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", to_db)
@@ -101,13 +109,13 @@ def parse_forecast_weather(w_file, con, col_names, values):
 				try:
 					rain = weather['rain']['3h']
 				except:
-					rain = 'None'
+					rain = 'Null'
 				reference_time = datetime.datetime.fromtimestamp(int(weather['reference_time'])).strftime('%Y-%m-%d %H:%M:%S')
 				snow = str(weather['snow'])
 				try:
 					snow = weather['snow']['3h']
 				except:
-					snow = 'None'
+					snow = 'Null'
 				status = weather['status']
 				sunrise_time = datetime.datetime.fromtimestamp(int(weather['sunrise_time'])).strftime('%Y-%m-%d %H:%M:%S')
 				sunset_time = datetime.datetime.fromtimestamp(int(weather['sunset_time'])).strftime('%Y-%m-%d %H:%M:%S')
@@ -122,7 +130,13 @@ def parse_forecast_weather(w_file, con, col_names, values):
 
 				w_tuple = w_tuple + (clouds, detailed_status, dewpoint, heat_index, humidex, humidity, pressure_pres, pressure_sea_level, rain, reference_time, snow, status, sunrise_time, sunset_time, temperature_temp, temperature_temp_kf, temperature_temp_max, temperature_temp_min, visibility_dist, weather_code, wind_deg, wind_speed)
 
-			
+			w_list = list(w_tuple)
+			for i, r in enumerate(w_list):
+				if r == 'None' or r == '':
+					w_list[i] = 'Null'
+
+			w_tuple = tuple(w_list)
+
 			if len(w_tuple) < 882:
 				filler = tuple(('Null' for i in range(882 - len(w_tuple))))
 				w_tuple += filler

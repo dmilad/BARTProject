@@ -27,7 +27,7 @@ text = """{"reception_time": 1435579256, "interval": "3h", "Location": {"country
 
 raw = simplejson.loads(text)
 
-pprint(raw)
+#pprint(raw)
 
 print len(raw['weathers'])
 
@@ -39,6 +39,17 @@ if len(a) < 6:
 	print app
 	a += app
 print a
+
+w_tuple = (1, 'b', 'None', 'Null', '')
+
+w_list = list(w_tuple)
+
+for i, r in enumerate(w_list):
+	if r == 'None' or r == '':
+		w_list[i] = 'Null'
+
+w_tuple = tuple(w_list)
+print w_tuple
 
 #sl_storage = object_storage.get_client(sl_user_name, sl_api_key, datacenter = sl_data_center)
 #
