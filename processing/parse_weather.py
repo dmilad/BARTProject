@@ -145,7 +145,7 @@ def main(w_file, col_names, values):
 
 	con.commit()
 
-	get_record_counts()
+	get_record_counts(con)
 
 	con.close()
 

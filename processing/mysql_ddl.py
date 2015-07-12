@@ -1,4 +1,4 @@
-#import MySQLdb
+import MySQLdb
 from mysql_cred import mysql_user, mysql_passowrd, mysql_database
 import sys
 
