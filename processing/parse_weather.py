@@ -2,7 +2,7 @@ import simplejson
 import datetime
 import MySQLdb
 from mysql_cred import mysql_user, mysql_passowrd, mysql_database
-
+import re
 
 
 def get_record_counts(con):
