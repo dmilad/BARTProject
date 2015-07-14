@@ -87,7 +87,6 @@ def bart_pipeline():
 				sentfiles.append(match.group(1) + '.txt')
 			except:
 				pass
-		print sentfiles
 
 		success = True
 		for t in to_send:
@@ -172,7 +171,6 @@ def weather_pipeline(col_names, values):
 				sentfiles.append(match.group(1) + '.txt')
 			except:
 				pass
-		print sentfiles
 
 		success = True
 		for t in to_send:
