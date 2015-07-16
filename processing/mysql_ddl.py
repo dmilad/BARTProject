@@ -189,6 +189,40 @@ def create_weather(cursor):
 	result = cursor.fetchall()
 	#print result
 
+	cursor.execute("""show tables;""")
+	result = cursor.fetchall()
+	print result
+
+def drop_onetime(cursor):
+	#drop weather tables 
+	cursor.execute("""drop table if exists sched_routesched;""")
+	cursor.execute("""drop table if exists sched_load;""")
+
+
+def create_onetime(cursor):
+	cursor.execute("""CREATE TABLE if not exists sched_routesched (
+	       uid bigint NOT NULL AUTO_INCREMENT, 
+	       sched_num tinyint
+	       day varchar(2), 
+	       route tinyint, 
+ 		   train tinyint, 
+	       station varchar(4), 
+	       origtime varchar(7), 
+	       bikeflag tinyint,
+	       PRIMARY KEY (uid))""")
+	result = cursor.fetchall()
+	#print result
+
+	cursor.execute("""CREATE TABLE if not exists sched_load (
+	       uid bigint NOT NULL AUTO_INCREMENT, 
+	       sched_num tinyint
+	       station varchar(4),
+	       route tinyint, 
+ 		   train tinyint,
+ 		   load tinyint,
+	       PRIMARY KEY (uid))""")
+	result = cursor.fetchall()
+	#print result
 
 	cursor.execute("""show tables;""")
 	result = cursor.fetchall()

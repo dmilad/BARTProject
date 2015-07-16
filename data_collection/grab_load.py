@@ -18,22 +18,25 @@ print rr
 tt = ['0'+str(i) for i in range(1, 10)]
 tt += [str(i) for i in range(10, 100)]
 
+sts = ['W', 'S', 'H']
+
 loads = []
 
 for a in ssss:
 	for b in rr:
 		for c in tt:
-			ld = a + b + c
-			response = requests.get(url + '&key=' + api_key + '&ld1=' + ld)
-			raw = xmltodict.parse(response.text)
-			req = raw['root']['load']['request']
-			sched_id = req['@scheduleID']
-			leg = req['leg']
-			load = leg['@load']
-			print [sched_id, a, b, c, load]
-			if int(load) > 0:
-				print 'yes!'
-				loads.append([sched_id, a, b, c, load])
+			for st in sts:
+				ld = a + b + c
+				response = requests.get(url + '&key=' + api_key + '&ld1=' + ld + '&st=' + st)
+				raw = xmltodict.parse(response.text)
+				req = raw['root']['load']['request']
+				sched_id = req['@scheduleID']
+				leg = req['leg']
+				load = leg['@load']
+				print [sched_id, a, b, c, load]
+				if int(load) > 0:
+					print 'yes!'
+					loads.append([sched_id, a, b, c, load])
 
 with open('load.txt', 'w') as writefile:
 	for l in loads:
