@@ -201,26 +201,26 @@ def drop_onetime(cursor):
 
 def create_onetime(cursor):
 	cursor.execute("""CREATE TABLE if not exists sched_routesched (
-	       uid bigint NOT NULL AUTO_INCREMENT, 
-	       sched_num tinyint
-	       day varchar(2), 
-	       route tinyint, 
- 		   train tinyint, 
-	       station varchar(4), 
-	       origtime varchar(7), 
-	       bikeflag tinyint,
-	       PRIMARY KEY (uid))""")
+		uid bigint NOT NULL AUTO_INCREMENT, 
+		sched_num tinyint,
+		day varchar(2), 
+		route tinyint, 
+		train tinyint, 
+		station varchar(4), 
+		origtime varchar(7), 
+		bikeflag tinyint,
+		PRIMARY KEY (uid))""")
 	result = cursor.fetchall()
 	#print result
 
 	cursor.execute("""CREATE TABLE if not exists sched_load (
-	       uid bigint NOT NULL AUTO_INCREMENT, 
-	       sched_num tinyint
-	       station varchar(4),
-	       route tinyint, 
- 		   train tinyint,
- 		   load tinyint,
-	       PRIMARY KEY (uid))""")
+		uid bigint NOT NULL AUTO_INCREMENT, 
+		sched_num tinyint,
+		station varchar(4),
+		route tinyint, 
+		train tinyint,
+		passload tinyint,
+		PRIMARY KEY (uid))""")
 	result = cursor.fetchall()
 	#print result
 
@@ -243,7 +243,7 @@ if __name__ == "__main__":
 	elif sys.argv[1] == "create_weather":
 		create_weather(cursor)
 	elif sys.argv[1] == "drop_onetime":
-		drop_onetimecursor)
+		drop_onetime(cursor)
 	elif sys.argv[1] == "create_onetime":
 		create_onetime(cursor)
 	else:
