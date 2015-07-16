@@ -128,6 +128,15 @@ if len(a) > 2:
 	a = a[:2]
 print a
 
+import os
+maindir = 'to_parse_weather'
+faces = os.walk(maindir).next()[2]
+try:
+	faces.remove('.DS_Store')
+except:
+	pass
+print faces
+
 #sl_storage = object_storage.get_client(sl_user_name, sl_api_key, datacenter = sl_data_center)
 #
 #dump_container = 'bart_dump'

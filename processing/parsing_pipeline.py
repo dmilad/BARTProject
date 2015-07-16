@@ -113,18 +113,20 @@ def bart_pipeline():
 
 def weather_pipeline(col_names, values):
 	#create storage client object
-	sl_storage = object_storage.get_client(sl_user_name, sl_api_key, datacenter = sl_data_center)
+	sl_stor = object_storage.get_client(sl_user_name, sl_api_key, datacenter = sl_data_center)
 
 	dump_container = 'weather_dump'
 	archive_container = 'weather_archive'
 
 	#grab list of file names
-	w_files_full = sl_storage[dump_container].objects()
+	w_files_full = sl_stor[dump_container].objects()
 
 	#process 100 max at a time
 	while len(w_files_full) > 100:
 		w_files_pre = w_files_full[:100]
 		w_files_full = list(set(w_files_full) - set(w_files_pre))
+
+		sl_storage = object_storage.get_client(sl_user_name, sl_api_key, datacenter = sl_data_center)
 
 		w_files = []
 		print "Grabbing list of files..."
@@ -149,7 +151,11 @@ def weather_pipeline(col_names, values):
 			print "Parsing..."
 			parse_weather.main(w_file, col_names, values)
 
-		to_send = w_files
+		to_send = os.walk('to_parse_weather').next()[2]
+		try:
+			to_send.remove('.DS_Store')
+		except:
+			pass
 
 		print "Sending files for archive container..."
 		for i, item in enumerate(to_send):
