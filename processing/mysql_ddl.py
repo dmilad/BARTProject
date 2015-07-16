@@ -242,6 +242,10 @@ if __name__ == "__main__":
 		drop_weather(cursor)
 	elif sys.argv[1] == "create_weather":
 		create_weather(cursor)
+	elif sys.argv[1] == "drop_onetime":
+		drop_onetimecursor)
+	elif sys.argv[1] == "create_onetime":
+		create_onetime(cursor)
 	else:
 		print "You need to specify an option: drop_bart, create_bart, drop_weather, create_weather"
 
