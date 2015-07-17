@@ -54,3 +54,7 @@ with open('../data_collection/routesched.txt', 'r') as readfile:
 	cursor.executemany("""INSERT INTO sched_routesched (sched_num, day, route, train, station, origtime, bikeflag) VALUES (%s, %s, %s, %s, %s, %s, %s)""", to_db)
 	cursor.close()
 	print "\t\tsched_routesched - Records written: " + str(len(to_db))
+
+
+con.commit()
+con.close()
