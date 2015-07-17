@@ -207,7 +207,7 @@ def create_onetime(cursor):
 		route tinyint, 
 		train tinyint, 
 		station varchar(4), 
-		origtime varchar(7), 
+		origtime varchar(8), 
 		bikeflag tinyint,
 		PRIMARY KEY (uid))""")
 	result = cursor.fetchall()
