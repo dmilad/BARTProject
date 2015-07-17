@@ -110,7 +110,6 @@ def bart_pipeline():
 
 
 
-
 def weather_pipeline(col_names, values):
 	#create storage client object
 	sl_stor = object_storage.get_client(sl_user_name, sl_api_key, datacenter = sl_data_center)
@@ -122,10 +121,9 @@ def weather_pipeline(col_names, values):
 	w_files_full = sl_stor[dump_container].objects()
 
 	#process 100 max at a time
-	while len(w_files_full) > 100:
-		w_files_pre = w_files_full[:100]
-		w_files_full = list(set(w_files_full) - set(w_files_pre))
+	while len(w_files_full) > 10:
 
+		w_files_pre = w_files_full[:100]
 		sl_storage = object_storage.get_client(sl_user_name, sl_api_key, datacenter = sl_data_center)
 
 		w_files = []
@@ -141,63 +139,31 @@ def weather_pipeline(col_names, values):
 
 		#for each file
 		for w_file in w_files:
+
+			sl_storage2 = object_storage.get_client(sl_user_name, sl_api_key, datacenter = sl_data_center)
+
 			print "Reading " + w_file
 			#read file from object_store and write to to_parse_weather
 			newLocalFile = open('to_parse_weather/'+w_file, "w")
-			swiftObject = sl_storage[dump_container][w_file].read()
+			swiftObject = sl_storage2[dump_container][w_file].read()
 			newLocalFile.write(swiftObject)
 			newLocalFile.close()
 
 			print "Parsing..."
 			parse_weather.main(w_file, col_names, values)
 
-		to_send = os.walk('to_parse_weather').next()[2]
-		try:
-			to_send.remove('.DS_Store')
-		except:
-			pass
+			sl_storage2[dump_container][w_file].delete()
+			print 'Deleted '+ w_file +' from dump container.'
 
-		print "Sending files for archive container..."
-		for i, item in enumerate(to_send):
-			print "Sending file " + str(i + 1) + ": " + item
-			fullfilename = 'to_parse_weather/' + item
-			with open(fullfilename, 'r') as readfile:
-				sl_storage[archive_container][readfile.name.split('/')[-1]].send(readfile)
-		print 'Data files sent to object store.'
+			print "Sending file " w_file + " to archive container."
+			with open('to_parse_weather/' + w_file, 'r') as readfile:
+				sl_storage2[archive_container][w_file].send(readfile)
+
+			os.remove('to_parse_weather/'+w_file)
+			print 'Deleted '+ w_file +' from local machine.'
 
 
-		#if they got there safely... 
-		#delete them from local disk and remove them from dump_container
-		sentfiles_pre = sl_storage[archive_container].objects()
-		sentfiles = []
-		for pre in sentfiles_pre:
-			prestr = pre.__str__()
-			try:
-				match = re.search(archive_container + ', (.*)\.txt', prestr)
-				sentfiles.append(match.group(1) + '.txt')
-			except:
-				pass
-
-		success = True
-		for t in to_send:
-			if t not in sentfiles:
-				success = False
-
-		if success:
-			#delete locally
-			for f in to_send:
-				os.remove('to_parse_weather/'+f)
-			print 'Deleted batch of local weather files.'
-			
-			#delete from dump_container
-			for f in to_send:
-				sl_storage[dump_container][f].delete()
-			print 'Deleted batch of dump weather files.'
-
-
-		else:
-			print 'Error: batch of weather files did not get to ' + archive_container + '. Try again later.'
-
+		w_files_full = sl_storage2[dump_container].objects()
 
 
 
