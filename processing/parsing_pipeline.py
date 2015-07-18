@@ -136,7 +136,8 @@ def weather_pipeline(col_names, values):
 			except:
 				pass
 
-
+		w_files = list(set(w_files))
+		
 		#for each file
 		for w_file in w_files:
 
