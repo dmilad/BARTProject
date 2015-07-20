@@ -137,7 +137,7 @@ def weather_pipeline(col_names, values):
 				pass
 
 		w_files = list(set(w_files))
-		
+
 		#for each file
 		for w_file in w_files:
 
@@ -220,7 +220,7 @@ if __name__ == "__main__":
 	col_names = "("+", ".join(col_names)+")"
 	values = "("+", ".join(values)+")"
 
-	weather_pipeline(col_names, values)
+	#weather_pipeline(col_names, values)
 	#run this forever
 	while True:
 
