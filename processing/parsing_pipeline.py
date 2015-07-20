@@ -155,7 +155,7 @@ def weather_pipeline(col_names, values):
 			sl_storage2[dump_container][w_file].delete()
 			print 'Deleted '+ w_file +' from dump container.'
 
-			print "Sending file " w_file + " to archive container."
+			print "Sending file "+ w_file + " to archive container."
 			with open('to_parse_weather/' + w_file, 'r') as readfile:
 				sl_storage2[archive_container][w_file].send(readfile)
 
