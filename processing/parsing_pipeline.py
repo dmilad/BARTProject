@@ -123,7 +123,7 @@ def weather_pipeline(col_names, values):
 	#process 100 max at a time
 	while len(w_files_full) > 10:
 
-		w_files_pre = w_files_full[:100]
+		w_files_pre = w_files_full[:500]
 		sl_storage = object_storage.get_client(sl_user_name, sl_api_key, datacenter = sl_data_center)
 
 		w_files = []
