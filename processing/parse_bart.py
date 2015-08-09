@@ -40,47 +40,50 @@ def adv_bsa(date_hour, fetchtimes_subset, con):
 
 		for i, c in enumerate(content[:-1]):
 
-			fetchtime = fetchtimes_subset[i]
-			raw = xmltodict.parse(c)
-
 			try:
-				date = raw['root']['date']
-				time = raw['root']['time']
+				fetchtime = fetchtimes_subset[i]
+				raw = xmltodict.parse(c)
 
-				bsa_type = type(raw['root']['bsa']) #list or collections.OrderedDict
-				#print bsa_type
-				if bsa_type == list:
-					for bsa_content in raw['root']['bsa']:
-						_id = bsa_content['@id']
-						station = bsa_content['station']
-						_type = bsa_content['type']
-						description = bsa_content['description']
-						posted = bsa_content['posted']
-						expires = bsa_content['expires']
-						to_db.append((fetchtime, date, time, _id, station, _type, description, posted, expires))
+				try:
+					date = raw['root']['date']
+					time = raw['root']['time']
 
-				else:
-					try:
-						bsa_content = raw['root']['bsa']
-						_id = bsa_content['@id']
-						station = bsa_content['station']
-						_type = bsa_content['type']
-						description = bsa_content['description']
-						posted = bsa_content['posted']
-						expires = bsa_content['expires']
-						to_db.append((fetchtime, date, time, _id, station, _type, description, posted, expires))
+					bsa_type = type(raw['root']['bsa']) #list or collections.OrderedDict
+					#print bsa_type
+					if bsa_type == list:
+						for bsa_content in raw['root']['bsa']:
+							_id = bsa_content['@id']
+							station = bsa_content['station']
+							_type = bsa_content['type']
+							description = bsa_content['description']
+							posted = bsa_content['posted']
+							expires = bsa_content['expires']
+							to_db.append((fetchtime, date, time, _id, station, _type, description, posted, expires))
 
-					except:
-						bsa_content = raw['root']['bsa']
-						_id = 'Null'
-						station = 'Null'
-						_type = 'Null'
-						description = bsa_content['description']
-						posted = 'Null'
-						expires = 'Null'
-						to_db.append((fetchtime, date, time, _id, station, _type, description, posted, expires))
+					else:
+						try:
+							bsa_content = raw['root']['bsa']
+							_id = bsa_content['@id']
+							station = bsa_content['station']
+							_type = bsa_content['type']
+							description = bsa_content['description']
+							posted = bsa_content['posted']
+							expires = bsa_content['expires']
+							to_db.append((fetchtime, date, time, _id, station, _type, description, posted, expires))
+
+						except:
+							bsa_content = raw['root']['bsa']
+							_id = 'Null'
+							station = 'Null'
+							_type = 'Null'
+							description = bsa_content['description']
+							posted = 'Null'
+							expires = 'Null'
+							to_db.append((fetchtime, date, time, _id, station, _type, description, posted, expires))
+				except:
+					print "There was a parsing error with a record, Skipping."
 			except:
-				print "There was a parsing error with a record, Skipping."
+				print "Fethctime mismatch, Skipping."
 
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO adv_bsa (fetchtime, date, time, id, station, type, description, posted, expires) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
@@ -109,16 +112,19 @@ def adv_count(date_hour, fetchtimes_subset, con):
 
 		for i, c in enumerate(content[:-1]):
 
-			fetchtime = fetchtimes_subset[i]
-			raw = xmltodict.parse(c)
-
 			try:
-				date = raw['root']['date']
-				time = raw['root']['time']
-				traincount = raw['root']['traincount']
-				to_db.append((fetchtime, date, time, traincount))
+				fetchtime = fetchtimes_subset[i]
+				raw = xmltodict.parse(c)
+
+				try:
+					date = raw['root']['date']
+					time = raw['root']['time']
+					traincount = raw['root']['traincount']
+					to_db.append((fetchtime, date, time, traincount))
+				except:
+					print "There was a parsing error with a record, Skipping."
 			except:
-				print "There was a parsing error with a record, Skipping."
+				print "Fethctime mismatch, Skipping."
 
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO adv_count (fetchtime, date, time, traincount) VALUES (%s, %s, %s, %s)""", to_db)
@@ -150,47 +156,50 @@ def adv_elev(date_hour, fetchtimes_subset, con):
 
 		for i, c in enumerate(content[:-1]):
 
-			fetchtime = fetchtimes_subset[i]
-			raw = xmltodict.parse(c)
-
 			try:
-				date = raw['root']['date']
-				time = raw['root']['time']
+				fetchtime = fetchtimes_subset[i]
+				raw = xmltodict.parse(c)
 
-				bsa_type = type(raw['root']['bsa']) #list or collections.OrderedDict
-				#print bsa_type
-				if bsa_type == list:
-					for bsa_content in raw['root']['bsa']:
-						_id = bsa_content['@id']
-						station = bsa_content['station']
-						_type = bsa_content['type']
-						description = bsa_content['description']
-						posted = bsa_content['posted']
-						expires = bsa_content['expires']
-						to_db.append((fetchtime, date, time, _id, station, _type, description, posted, expires))
+				try:
+					date = raw['root']['date']
+					time = raw['root']['time']
 
-				else:
-					try:
-						bsa_content = raw['root']['bsa']
-						_id = bsa_content['@id']
-						station = bsa_content['station']
-						_type = bsa_content['type']
-						description = bsa_content['description']
-						posted = bsa_content['posted']
-						expires = bsa_content['expires']
-						to_db.append((fetchtime, date, time, _id, station, _type, description, posted, expires))
+					bsa_type = type(raw['root']['bsa']) #list or collections.OrderedDict
+					#print bsa_type
+					if bsa_type == list:
+						for bsa_content in raw['root']['bsa']:
+							_id = bsa_content['@id']
+							station = bsa_content['station']
+							_type = bsa_content['type']
+							description = bsa_content['description']
+							posted = bsa_content['posted']
+							expires = bsa_content['expires']
+							to_db.append((fetchtime, date, time, _id, station, _type, description, posted, expires))
 
-					except:
-						bsa_content = raw['root']['bsa']
-						_id = 'Null'
-						station = 'Null'
-						_type = 'Null'
-						description = bsa_content['description']
-						posted = 'Null'
-						expires = 'Null'
-						to_db.append((fetchtime, date, time, _id, station, _type, description, posted, expires))
+					else:
+						try:
+							bsa_content = raw['root']['bsa']
+							_id = bsa_content['@id']
+							station = bsa_content['station']
+							_type = bsa_content['type']
+							description = bsa_content['description']
+							posted = bsa_content['posted']
+							expires = bsa_content['expires']
+							to_db.append((fetchtime, date, time, _id, station, _type, description, posted, expires))
+
+						except:
+							bsa_content = raw['root']['bsa']
+							_id = 'Null'
+							station = 'Null'
+							_type = 'Null'
+							description = bsa_content['description']
+							posted = 'Null'
+							expires = 'Null'
+							to_db.append((fetchtime, date, time, _id, station, _type, description, posted, expires))
+				except:
+					print "There was a parsing error with a record, Skipping."
 			except:
-				print "There was a parsing error with a record, Skipping."
+				print "Fethctime mismatch, Skipping."
 
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO adv_elev (fetchtime, date, time, id, station, type, description, posted, expires) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
@@ -237,28 +246,30 @@ def sched_special(date_hour, fetchtimes_subset, con):
 
 		for i, c in enumerate(content[:-1]):
 
-			fetchtime = fetchtimes_subset[i]
-			raw = xmltodict.parse(c)
-
 			try:
-				schedules = raw['root']['special_schedules']['special_schedule']
-				for special_schedule in schedules:
-					#special_schedule = schedule['special_schedule']
-					start_date = special_schedule['start_date']
-					end_date = special_schedule['end_date']
-					start_time = special_schedule['start_time']
-					end_time = special_schedule['end_time']
-					text_ = special_schedule['text']
-					link = special_schedule['link']
-					orig = special_schedule['orig']
-					dest = special_schedule['dest']
-					day_of_week = special_schedule['day_of_week']
-					routes_affected = special_schedule['routes_affected']
-					to_db.append((fetchtime, start_date, end_date, start_time, end_time, text_, link, orig, dest, day_of_week, routes_affected))
-			
-			except:
-				print "There was a parsing error with a record, Skipping."
+				fetchtime = fetchtimes_subset[i]
+				raw = xmltodict.parse(c)
 
+				try:
+					schedules = raw['root']['special_schedules']['special_schedule']
+					for special_schedule in schedules:
+						#special_schedule = schedule['special_schedule']
+						start_date = special_schedule['start_date']
+						end_date = special_schedule['end_date']
+						start_time = special_schedule['start_time']
+						end_time = special_schedule['end_time']
+						text_ = special_schedule['text']
+						link = special_schedule['link']
+						orig = special_schedule['orig']
+						dest = special_schedule['dest']
+						day_of_week = special_schedule['day_of_week']
+						routes_affected = special_schedule['routes_affected']
+						to_db.append((fetchtime, start_date, end_date, start_time, end_time, text_, link, orig, dest, day_of_week, routes_affected))
+				
+				except:
+					print "There was a parsing error with a record, Skipping."
+			except:
+				print "Fethctime mismatch, Skipping."
 
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO sched_special (fetchtime, start_date, end_date, start_time, end_time, text_, link, orig, dest, day_of_week, routes_affected) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
@@ -298,25 +309,27 @@ def rout_routes(date_hour, fetchtimes_subset, con):
 
 		for i, c in enumerate(content[:-1]):
 
-			fetchtime = fetchtimes_subset[i]
-			raw = xmltodict.parse(c)
-
 			try:
-				sched_num = raw['root']['sched_num']
+				fetchtime = fetchtimes_subset[i]
+				raw = xmltodict.parse(c)
 
-				routes = raw['root']['routes']['route']
-				for route in routes:
-					#route = r['route']
-					name = route['name']
-					abbr = route['abbr']
-					routeid = route['routeID']
-					number = route['number']
-					color = route['color']
-					to_db.append((fetchtime, sched_num, name, abbr, routeid, number, color))
+				try:
+					sched_num = raw['root']['sched_num']
 
+					routes = raw['root']['routes']['route']
+					for route in routes:
+						#route = r['route']
+						name = route['name']
+						abbr = route['abbr']
+						routeid = route['routeID']
+						number = route['number']
+						color = route['color']
+						to_db.append((fetchtime, sched_num, name, abbr, routeid, number, color))
+
+				except:
+					print "There was a parsing error with a record, Skipping."
 			except:
-				print "There was a parsing error with a record, Skipping."
-
+				print "Fethctime mismatch, Skipping."
 
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO rout_routes (fetchtime, sched_num, name, abbr, routeid, number, color) VALUES (%s, %s, %s, %s, %s, %s, %s)""", to_db)
@@ -380,36 +393,39 @@ def rout_routeinfo(date_hour, fetchtimes_subset, con):
 
 		for i, c in enumerate(content[:-1]):
 
-			fetchtime = fetchtimes_subset[i]
-			raw = xmltodict.parse(c)
-
 			try:
-				sched_num = raw['root']['sched_num']
+				fetchtime = fetchtimes_subset[i]
+				raw = xmltodict.parse(c)
 
-				routes = raw['root']['routes']['route']
-				for route in routes:
-					#route = r['route']
-					name = route['name']
-					abbr = route['abbr']
-					routeid = route['routeID']
-					number = route['number']
-					origin = route['origin']
-					destination = route['destination']
-					direction = route['direction']
-					color = route['color']
-					holidays = route['holidays']
-					num_stns = route['num_stns']
+				try:
+					sched_num = raw['root']['sched_num']
 
-					s = []
-					config = route['config']['station']
-					for c in config:
-						s.append(c)
-					stations = ",".join(s)
+					routes = raw['root']['routes']['route']
+					for route in routes:
+						#route = r['route']
+						name = route['name']
+						abbr = route['abbr']
+						routeid = route['routeID']
+						number = route['number']
+						origin = route['origin']
+						destination = route['destination']
+						direction = route['direction']
+						color = route['color']
+						holidays = route['holidays']
+						num_stns = route['num_stns']
 
-					to_db.append((fetchtime, sched_num, name, abbr, routeid, number, origin, destination, direction, color, holidays, num_stns, stations))
+						s = []
+						config = route['config']['station']
+						for c in config:
+							s.append(c)
+						stations = ",".join(s)
 
+						to_db.append((fetchtime, sched_num, name, abbr, routeid, number, origin, destination, direction, color, holidays, num_stns, stations))
+
+				except:
+					print "There was a parsing error with a record, Skipping."
 			except:
-				print "There was a parsing error with a record, Skipping."
+				print "Fethctime mismatch, Skipping."
 
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO rout_routeinfo (fetchtime, sched_num, name, abbr, routeid, number, origin, destination, direction, color, holidays, num_stns, stations) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
@@ -485,17 +501,80 @@ def rt_etd(date_hour, fetchtimes_subset, con):
 
 		for i, c in enumerate(content[:-1]):
 
-			fetchtime = fetchtimes_subset[i]
-			raw = xmltodict.parse(c)
-
 			try:
-				date = raw['root']['date']
-				time = raw['root']['time']
+				fetchtime = fetchtimes_subset[i]
+				raw = xmltodict.parse(c)
 
-				station_type = type(raw['root']['station'])
+				try:
+					date = raw['root']['date']
+					time = raw['root']['time']
 
-				if station_type == list:
-					for station in raw['root']['station']:
+					station_type = type(raw['root']['station'])
+
+					if station_type == list:
+						for station in raw['root']['station']:
+							name = station['name']
+							abbr = station['abbr']
+
+							etd_type = type(station['etd'])
+
+							if etd_type == list:
+								for etd in station['etd']:
+									destination = etd['destination']
+									abbreviation = etd['abbreviation']
+
+									estimate_type = type(etd['estimate'])
+
+									if estimate_type == list:
+										for estimate in etd['estimate']:
+											minutes = estimate['minutes']
+											platform = estimate['platform']
+											direction = estimate['direction']
+											length = estimate['length']
+											color = estimate['color']
+											hexcolor = estimate['hexcolor']
+											bikeflag = estimate['bikeflag']
+											to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
+									else:
+										estimate = etd['estimate']
+										minutes = estimate['minutes']
+										platform = estimate['platform']
+										direction = estimate['direction']
+										length = estimate['length']
+										color = estimate['color']
+										hexcolor = estimate['hexcolor']
+										bikeflag = estimate['bikeflag']
+										to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
+
+							else:
+								etd = station['etd']
+								destination = etd['destination']
+								abbreviation = etd['abbreviation']
+
+								estimate_type = type(etd['estimate'])
+
+								if estimate_type == list:
+									for estimate in etd['estimate']:
+										minutes = estimate['minutes']
+										platform = estimate['platform']
+										direction = estimate['direction']
+										length = estimate['length']
+										color = estimate['color']
+										hexcolor = estimate['hexcolor']
+										bikeflag = estimate['bikeflag']
+										to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
+								else:
+									estimate = etd['estimate']
+									minutes = estimate['minutes']
+									platform = estimate['platform']
+									direction = estimate['direction']
+									length = estimate['length']
+									color = estimate['color']
+									hexcolor = estimate['hexcolor']
+									bikeflag = estimate['bikeflag']
+									to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
+					else:
+						station = raw['root']['station']
 						name = station['name']
 						abbr = station['abbr']
 
@@ -556,72 +635,12 @@ def rt_etd(date_hour, fetchtimes_subset, con):
 								hexcolor = estimate['hexcolor']
 								bikeflag = estimate['bikeflag']
 								to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
-				else:
-					station = raw['root']['station']
-					name = station['name']
-					abbr = station['abbr']
 
-					etd_type = type(station['etd'])
-
-					if etd_type == list:
-						for etd in station['etd']:
-							destination = etd['destination']
-							abbreviation = etd['abbreviation']
-
-							estimate_type = type(etd['estimate'])
-
-							if estimate_type == list:
-								for estimate in etd['estimate']:
-									minutes = estimate['minutes']
-									platform = estimate['platform']
-									direction = estimate['direction']
-									length = estimate['length']
-									color = estimate['color']
-									hexcolor = estimate['hexcolor']
-									bikeflag = estimate['bikeflag']
-									to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
-							else:
-								estimate = etd['estimate']
-								minutes = estimate['minutes']
-								platform = estimate['platform']
-								direction = estimate['direction']
-								length = estimate['length']
-								color = estimate['color']
-								hexcolor = estimate['hexcolor']
-								bikeflag = estimate['bikeflag']
-								to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
-
-					else:
-						etd = station['etd']
-						destination = etd['destination']
-						abbreviation = etd['abbreviation']
-
-						estimate_type = type(etd['estimate'])
-
-						if estimate_type == list:
-							for estimate in etd['estimate']:
-								minutes = estimate['minutes']
-								platform = estimate['platform']
-								direction = estimate['direction']
-								length = estimate['length']
-								color = estimate['color']
-								hexcolor = estimate['hexcolor']
-								bikeflag = estimate['bikeflag']
-								to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
-						else:
-							estimate = etd['estimate']
-							minutes = estimate['minutes']
-							platform = estimate['platform']
-							direction = estimate['direction']
-							length = estimate['length']
-							color = estimate['color']
-							hexcolor = estimate['hexcolor']
-							bikeflag = estimate['bikeflag']
-							to_db.append((fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag))
-
+				except:
+					print "There was a parsing error with a record, Skipping."
 			except:
-				print "There was a parsing error with a record, Skipping."
-
+				print "Fethctime mismatch, Skipping."
+				
 		cursor = con.cursor()
 		cursor.executemany("""INSERT INTO rt_etd (fetchtime, date, time, name, abbr, destination, abbreviation, minutes, platform, direction, length, color, hexcolor, bikeflag) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", to_db)
 		cursor.close()
