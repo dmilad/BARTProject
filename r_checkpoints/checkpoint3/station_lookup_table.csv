@@ -1,0 +1,24 @@
+ui_name,station_name,r_name
+Pittsburg / Bay Point,PITT,s_pitt
+North Concord / Martinez,NCON,s_ncon
+Concord,CONC,s_conc
+Pleasant Hill / Contra Costa Centre,PHIL,s_phil
+Walnut Creek,WCRK,s_wcrk
+Lafayette,LAFY,s_lafy
+Orinda,ORIN,s_orin
+Rockridge,ROCK,s_rock
+MacArthur,MCAR,s_mcar
+19th Street Oakland,19TH,s_19
+12th Street Oakland City Center,12TH,s_12
+West Oakland,WOAK,s_woak
+Embarcadero,EMBR,s_embr
+Montgomery Street,MONT,s_mont
+Powell Street,POWL,s_powl
+Civic Center / UN Plaza,CIVC,s_civc
+16th Street Mission,16TH,s_16
+24th Street Mission,24TH,s_24
+Glen Park,GLEN,s_glen
+Balboa Park,BALB,s_balb
+San Bruno,SBRN,s_sbrn
+San Francisco International Airport,SFIA,s_sfia
+Millbrae,MLBR,s_mlbr
